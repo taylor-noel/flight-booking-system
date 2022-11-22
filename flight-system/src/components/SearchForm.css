@@ -1,0 +1,10 @@
+.search{
+    display: grid;
+    width: 60%;
+    margin: auto;
+}
+
+label {
+    display: inline-grid;
+    text-align: left;
+}
