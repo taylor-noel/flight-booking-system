@@ -1,0 +1,12 @@
+.header{
+    height:30px;
+    padding: 20px;
+}
+
+.login{
+    float: right;
+}
+
+.company{
+    float: left;
+}
