@@ -19,7 +19,6 @@ function LoginPage() {
         //TODO: authorize credentials
         if (email.value === "taylor") {
             navigate('/admin');
-
         }
         else {
             setAuthorize(true);
