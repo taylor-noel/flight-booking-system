@@ -8,7 +8,7 @@ function AdminPage() {
   
     
     return <div>
-        <FlightTable/>
+        <FlightTable admin={true}/>
         {/* <AirplaneTable/> */}
     </div>
 }

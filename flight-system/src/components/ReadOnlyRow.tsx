@@ -9,8 +9,12 @@ const ReadOnlyRow = (props:any) => {
             <td>{props.flight.departureDate}</td>
             <td>{props.flight.arrivalDate}</td>
             <td>{props.flight.airplaneModel}</td>
+            {props.admin ? 
             <td><button type="button" onClick={(event) => props.handleEditClick(event, props.flight)}>Edit</button>
             <button type="button" onClick={(event) => props.handleDeleteClick(event, props.flight)}>Delete</button></td>
+            :
+            <td><button type="button" onClick={(event) => props.handleBookClick(event, props.flight)}>Book</button></td>}
+            
         </tr>
     )
 }

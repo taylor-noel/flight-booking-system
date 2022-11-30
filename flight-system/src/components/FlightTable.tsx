@@ -3,14 +3,17 @@ import Select from "react-select";
 import EditableRow from "./EditableRow";
 import ReadOnlyRow from "./ReadOnlyRow";
 import './FlightTable.css';
+import { useNavigate } from 'react-router-dom';
 
 
-function FlightTable() {
+
+function FlightTable(props:any) {
 
     //TODO: get all value for citites, flights, and airlines from database
     const cities = ["calgary", "victoria", "toronto"];
     const airlines = ["Air Canada", "West Jet"];
     const airplaneModels = ["model1", "model2"];
+    const navigate = useNavigate();
 
     interface Flight {
         airline: string
@@ -158,7 +161,9 @@ function FlightTable() {
         })
     }
 
-
+    function handleBookClick(event:any, flight:any){
+        navigate('/loginCustomer');
+    }
 
 
     return <div>
@@ -183,17 +188,22 @@ function FlightTable() {
                                 editFlightData={editFlightData}
                                 handleEditFlightChange={handleEditFlightChange}
                                 handleSaveFlight={handleSaveFlight}
-                                handleCancelFlight={handleCancelFlight} />
+                                handleCancelFlight={handleCancelFlight} 
+                                admin={props.admin}/>
                             :
                             <ReadOnlyRow
                                 flight={flight}
                                 handleEditClick={handleEditClick}
-                                handleDeleteClick={handleDeleteClick} />
+                                handleDeleteClick={handleDeleteClick} 
+                                admin={props.admin}
+                                handleBookClick={handleBookClick}/>
                         }
                     </Fragment>
                 ))}
             </tbody>
         </table>
+        {props.admin ? 
+        <div>
         <h3>Add a Flight</h3>
         <form className="addFlight" onSubmit={handleForm}>
             <Select
@@ -236,6 +246,11 @@ function FlightTable() {
                 onChange={handleChange} />
             <button type="submit">Add</button>
         </form>
+        </div>
+        :
+        null
+    }
+        
 
     </div>
 }
