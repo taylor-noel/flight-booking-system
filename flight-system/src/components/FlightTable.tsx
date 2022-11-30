@@ -165,7 +165,6 @@ function FlightTable(props:any) {
         navigate('/loginCustomer');
     }
 
-
     return <div>
         <h3>Flights</h3>
         <table className="flightTable">

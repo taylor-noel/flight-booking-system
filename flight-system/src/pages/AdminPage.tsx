@@ -9,7 +9,7 @@ function AdminPage() {
     
     return <div>
         <FlightTable admin={true}/>
-        {/* <AirplaneTable/> */}
+        <AirplaneTable admin={true}/>
     </div>
 }
 export default AdminPage;
