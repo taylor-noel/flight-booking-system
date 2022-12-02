@@ -2,12 +2,12 @@ import { Fragment, useState } from "react";
 import Select from "react-select";
 import EditableRow from "./EditableRow";
 import ReadOnlyRow from "./ReadOnlyRow";
-import './FlightTable.css';
+import './Table.css';
 import { useNavigate } from 'react-router-dom';
 
 
 
-function FlightTable(props:any) {
+function FlightTable(props: any) {
 
     //TODO: get all value for citites, flights, and airlines from database
     const cities = ["calgary", "victoria", "toronto"];
@@ -161,13 +161,13 @@ function FlightTable(props:any) {
         })
     }
 
-    function handleBookClick(event:any, flight:any){
+    function handleBookClick(event: any, flight: any) {
         navigate('/loginCustomer');
     }
 
     return <div>
         <h3>Flights</h3>
-        <table className="flightTable">
+        <table className="table">
             <thead>
                 <tr>
                     <th>Flight ID</th>
@@ -187,69 +187,83 @@ function FlightTable(props:any) {
                                 editFlightData={editFlightData}
                                 handleEditFlightChange={handleEditFlightChange}
                                 handleSaveFlight={handleSaveFlight}
-                                handleCancelFlight={handleCancelFlight} 
-                                admin={props.admin}/>
+                                handleCancelFlight={handleCancelFlight}
+                                admin={props.admin} />
                             :
                             <ReadOnlyRow
                                 flight={flight}
                                 handleEditClick={handleEditClick}
-                                handleDeleteClick={handleDeleteClick} 
+                                handleDeleteClick={handleDeleteClick}
                                 admin={props.admin}
-                                handleBookClick={handleBookClick}/>
+                                handleBookClick={handleBookClick} />
                         }
                     </Fragment>
                 ))}
             </tbody>
         </table>
-        {props.admin ? 
-        <div>
-        <h3>Add a Flight</h3>
-        <form className="addFlight" onSubmit={handleForm}>
-            <Select
-                placeholder="Airline"
-                options={airlines.map(t => ({ value: 'airline', label: t }))}
-                required={true}
-                onChange={handleChange} />
+        {props.admin ?
+            <div>
+                <h3>Add a Flight</h3>
+                <form className="addForm" onSubmit={handleForm}>
+                    <div className="formItem">
+                        <label>Airline Carrier</label>
+                        <Select
+                            placeholder="Carrier"
+                            options={airlines.map(t => ({ value: 'airline', label: t }))}
+                            required={true}
+                            onChange={handleChange} />
+                    </div>
 
-            <Select
-                name="departure"
-                placeholder="Departure City"
-                options={cities.map(t => ({ value: 'departure', label: t }))}
-                required={true}
-                onChange={handleChange} />
+                    <div className="formItem">
+                        <label>Departure City</label>
+                        <Select
+                            name="departure"
+                            placeholder="Departure City"
+                            options={cities.map(t => ({ value: 'departure', label: t }))}
+                            required={true}
+                            onChange={handleChange} />
+                    </div>
+                    <div className="formItem">
+                        <label>Destination City</label>
+                        <Select
+                            name="arrival"
+                            placeholder="Arrival City"
+                            options={cities.map(t => ({ value: 'arrival', label: t }))}
+                            required={true}
+                            onChange={handleChange} />
+                    </div>
+                    <div className="formItem">
+                        <label>Departure Date</label>
+                        <input
+                            name="departureDate"
+                            type="datetime-local"
+                            required={true}
+                            onChange={handleDateChange} />
+                    </div>
+                    <div className="formItem">
+                        <label>Arrival Date</label>
+                        <input
+                            name="arrivalDate"
+                            type="datetime-local"
+                            required={true}
+                            onChange={handleDateChange} />
+                    </div>
+                    <div className="formItem">
+                        <label>Airplane Model</label>
+                        <Select
+                            name="airplaneModel"
+                            placeholder="Airplane Model"
+                            options={airplaneModels.map(t => ({ value: 'airplaneModel', label: t }))}
+                            required={true}
+                            onChange={handleChange} />
+                    </div>
+                    <button type="submit">Add</button>
+                </form>
+            </div>
+            :
+            null
+        }
 
-            <Select
-                name="arrival"
-                placeholder="Arrival City"
-                options={cities.map(t => ({ value: 'arrival', label: t }))}
-                required={true}
-                onChange={handleChange} />
-
-            <input
-                name="departureDate"
-                type="datetime-local"
-                required={true}
-                onChange={handleDateChange} />
-
-            <input
-                name="arrivalDate"
-                type="datetime-local"
-                required={true}
-                onChange={handleDateChange} />
-
-            <Select
-                name="airplaneModel"
-                placeholder="Airplane Model"
-                options={airplaneModels.map(t => ({ value: 'airplaneModel', label: t }))}
-                required={true}
-                onChange={handleChange} />
-            <button type="submit">Add</button>
-        </form>
-        </div>
-        :
-        null
-    }
-        
 
     </div>
 }

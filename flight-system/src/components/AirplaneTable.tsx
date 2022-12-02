@@ -1,9 +1,8 @@
 import { Fragment, useState } from "react";
 import Select from "react-select";
 import EditableRow from "./EditableRow";
-import ReadOnlyRow from "./ReadOnlyRow";
 import ReadOnlyRowAirplane from "./ReadOnlyRowAirplane";
-import './FlightTable.css';
+import './Table.css';
 
 function AirplaneTable(props: any) {
 
@@ -66,9 +65,9 @@ function AirplaneTable(props: any) {
         setFormData(newFormData);
     }
 
-    function handleDateChange(event: any) {
+    function handleSelectChange(options: any) {
         const newFormData = { ...formData };
-        newFormData[event.target.name as keyof typeof formData] = event.target.value;
+        newFormData[options.value as keyof typeof formData] = options.label;
 
         setFormData(newFormData);
     }
@@ -86,7 +85,6 @@ function AirplaneTable(props: any) {
     }
 
     function handleSaveAirplane(event: any) {
-        // const airplaneNumber = editAirplaneData.airline + "-1";
         const editedAirplane = {
             id: editAirplaneData.id,
             model: editAirplaneData.model,
@@ -105,9 +103,8 @@ function AirplaneTable(props: any) {
 
     // TODO: update to push formdata to database
     function handleForm(event: any) {
-        // const airplaneNumber = formData.airline + "-1";
         const newAirplane = {
-            id: formData.id,
+            id: "2",
             model: formData.model,
             rows: formData.rows,
             seats_per_row: formData.seats_per_row,
@@ -128,7 +125,7 @@ function AirplaneTable(props: any) {
 
     return <div>
         <h3>Airplanes</h3>
-        <table className="flightTable">
+        <table className="table">
             <thead>
                 <tr>
                     <th>Airplane ID</th>
@@ -162,36 +159,47 @@ function AirplaneTable(props: any) {
             </tbody>
         </table>
         <h3>Add a Airplane</h3>
-        <form className="addFlight" onSubmit={handleForm}>
-            <input
-                name="model"
-                placeholder="Model"
-                type="text"
-                required={true}
-                onChange={handleChange}
-            />
-
-            <input
-                name="rows"
-                type="number"
-                required={true}
-                onChange={handleChange}
-            />
-
-            <input
-                name="seats_per_row"
-                type="number"
-                required={true}
-                onChange={handleChange}
-            />
-
-            <Select
-                name="carrier"
-                placeholder="Carrier"
-                options={carriers.map(t => ({ value: 'carrier_name', label: t }))}
-                required={true}
-                onChange={handleChange}
-            />
+        <form className="addForm" onSubmit={handleForm}>
+            <div className="formItem">
+                <label>Airplane Model</label>
+                <input
+                    name="model"
+                    placeholder="Model"
+                    type="text"
+                    required={true}
+                    onChange={handleChange}
+                />
+            </div>
+            <div className="formItem">
+                <label>Number of Rows</label>
+                <input
+                    name="rows"
+                    type="number"
+                    placeholder="30"
+                    required={true}
+                    onChange={handleChange}
+                />
+            </div>
+            <div className="formItem">
+                <label>Number of Seats Per Row</label>
+                <input
+                    name="seats_per_row"
+                    type="number"
+                    placeholder="6"
+                    required={true}
+                    onChange={handleChange}
+                />
+            </div>
+            <div className="formItem">
+                <label>Airline Carrier</label>
+                <Select
+                    name="carrier"
+                    placeholder="Carrier"
+                    options={carriers.map(t => ({ value: 'carrier_name', label: t }))}
+                    required={true}
+                    onChange={handleSelectChange}
+                />
+            </div>
             <button type="submit">Add</button>
         </form>
 
