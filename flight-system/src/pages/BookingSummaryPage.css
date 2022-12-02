@@ -1,0 +1,15 @@
+.summary{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.summaryPage{
+    background-color: whitesmoke;
+    height: 880px;
+}
+
+.summaryTitle{
+    font-size:xx-large;
+    font-weight: bold;
+    margin-top:5%
+}
