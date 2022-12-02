@@ -117,7 +117,7 @@ function FlightTable(props:any) {
     }
 
     function handleSaveFlight(event: any) {
-        const flightNumber = editFlightData.airline + "-1";
+        const flightNumber = editFlightData.airline + "-" + editFlightData.flightNumber;
         const editedFlight = {
             "flightNumber": flightNumber,
             "departure": editFlightData.departure,
