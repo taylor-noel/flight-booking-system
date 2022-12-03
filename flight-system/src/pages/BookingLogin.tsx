@@ -1,6 +1,7 @@
 import './LoginPage.css';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import Header from '../components/Header';
 
 function BookingLoginPage() {
     const [passport, setPassport] = useState({ value: '' });
@@ -22,6 +23,7 @@ function BookingLoginPage() {
     }
 
     return <div className="loginPage">
+        <Header showLogin={false}/>
         <form className="loginForm">
             <label className="title">Login</label>
             <label>Passport Number</label>

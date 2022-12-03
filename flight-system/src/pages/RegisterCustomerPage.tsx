@@ -1,5 +1,6 @@
 import "./RegisterCustomerPage.css";
 import { useNavigate } from 'react-router-dom';
+import Header from "../components/Header";
 
 
 function RegisterCustomerPage() {
@@ -10,6 +11,7 @@ function RegisterCustomerPage() {
     }
 
     return <div className="registerPage">
+        <Header showLogin={false}/>
         <form className="registerForm">
             <label className="title">Register as a Customer</label>
             <div className="sameLine">

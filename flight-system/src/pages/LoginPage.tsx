@@ -1,6 +1,7 @@
 import './LoginPage.css';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import Header from '../components/Header';
 
 function LoginPage() {
     const [authorize, setAuthorize] = useState(false);
@@ -27,6 +28,7 @@ function LoginPage() {
     }
 
     return <div className="loginPage">
+        <Header showLogin={false}/>
         <form className="loginForm">
             <label className="title">Login</label>
             <label>Email Address</label>

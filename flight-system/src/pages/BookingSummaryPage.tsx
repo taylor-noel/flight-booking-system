@@ -1,3 +1,4 @@
+import Header from '../components/Header';
 import './BookingSummaryPage.css';
 
 function BookingSummaryPage(props: any) {
@@ -24,8 +25,9 @@ function BookingSummaryPage(props: any) {
         "airplaneModel": "123"
     }
 
-    return <div className="summaryPage">
-        <label className="summaryTitle">Booking Summary</label>
+    return <div>
+        <Header showLogin={false}/>
+        <h3>Booking Summary</h3>
         <div className="summary">
             <form className="registerForm">
                 <label className="title">Customer Information</label>

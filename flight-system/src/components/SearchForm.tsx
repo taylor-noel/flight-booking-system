@@ -2,6 +2,8 @@ import React from "react";
 import './SearchForm.css'
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlane } from "@fortawesome/free-solid-svg-icons";
 
 function SearchForm(props: any) {
     const list = ["calgary", "victoria", "toronto"];
@@ -19,6 +21,7 @@ function SearchForm(props: any) {
                 className="selectInput"
                 placeholder="From"
                 options={list.map(t => ({ value: t, label: t }))} />
+                <FontAwesomeIcon icon={faPlane} className="planeIcon"/>
             <Select
                 className="selectInput"
                 placeholder="To"
