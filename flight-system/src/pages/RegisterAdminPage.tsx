@@ -25,7 +25,8 @@ function RegisterAdminPage() {
             //TODO: write to database
             
         }
-        
+        navigate('/login');
+
     }
 
     return <div className="loginPage">

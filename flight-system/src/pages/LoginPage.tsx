@@ -50,7 +50,7 @@ function LoginPage() {
                 onChange={handlePassword}
             />
             <button onClick={handleLogin}>Submit</button>
-            <a onClick={handleRegister}>Create an account</a>
+            <a className ="link" onClick={handleRegister}>Create an account</a>
             {authorize ? <label>Error: incorrect credentials, please check your email and password.</label> : null}
         </form>
     </div>

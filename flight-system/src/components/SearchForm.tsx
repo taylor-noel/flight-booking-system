@@ -30,12 +30,7 @@ function SearchForm(props: any) {
             <div className="dateInput">
                 <label>Depart </label>
                 <input type="date" name="departure" />
-            </div>
-            <div className="dateInput">
-                <label>Return  </label>
-                <input type="date" name="return" />
-            </div>
-            
+            </div>            
         </form>
         
         <input 

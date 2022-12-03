@@ -224,7 +224,7 @@ function FlightTable(props: any) {
                             onChange={handleChange} />
                     </div>
                     <div className="formItem">
-                        <label>Destination City</label>
+                        <label>Arrival City</label>
                         <Select
                             name="arrival"
                             placeholder="Arrival City"
