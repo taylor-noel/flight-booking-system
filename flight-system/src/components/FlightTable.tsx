@@ -4,6 +4,7 @@ import EditableRow from "./EditableRow";
 import ReadOnlyRow from "./ReadOnlyRow";
 import './Table.css';
 import { useNavigate } from 'react-router-dom';
+import SearchForm from "./SearchForm";
 
 
 
@@ -165,8 +166,32 @@ function FlightTable(props: any) {
         navigate('/loginCustomer');
     }
 
+    function handleDepartFilter() {
+        //TODO: call to the database
+    }
+
+    function handleArriveFilter() {
+        //TODO: call to the database
+    }
+
     return <div>
+
         <h3>Flights</h3>
+        {props.admin ? null :
+            <div className="filterDiv">
+                <label className="filter">
+                    Depart After
+                    <input type="time"
+                        onChange={handleDepartFilter} />
+                </label>
+                <label className="filter">
+                    Arrive Before
+                    <input type="time"
+                        onChange={handleArriveFilter} />
+                </label>
+            </div>
+        }
+
         <table className="table">
             <thead>
                 <tr>
@@ -263,7 +288,6 @@ function FlightTable(props: any) {
             :
             null
         }
-
 
     </div>
 }
