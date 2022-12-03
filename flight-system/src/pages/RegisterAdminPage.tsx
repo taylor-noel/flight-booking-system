@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Header from '../components/Header';
 
-function LoginPage() {
+function RegisterAdminPage() {
     const [authorize, setAuthorize] = useState(false);
     const [email, setEmail] = useState({ value: '' });
     const [password, setPassword] = useState({ value: '' });
@@ -16,25 +16,22 @@ function LoginPage() {
     function handlePassword(event: any) {
         setPassword({ value: event.target.value });
     }
-    function handleLogin(event: any) {
-        //TODO: authorize credentials
+    function handleSubmit(event: any) {
+        //TODO: Check if there is a record with that email
         if (email.value === "taylor") {
-            navigate('/admin');
-        }
-        else {
             setAuthorize(true);
         }
-
-    }
-
-    function handleRegister(){
-        navigate('/register');
+        else {
+            //TODO: write to database
+            
+        }
+        
     }
 
     return <div className="loginPage">
         <Header showLogin={false}/>
         <form className="loginForm">
-            <label className="title">Login</label>
+            <label className="title">Register as an Admin</label>
             <label>Email Address</label>
             <input
                 type="email"
@@ -49,10 +46,9 @@ function LoginPage() {
                 placeholder="Enter password"
                 onChange={handlePassword}
             />
-            <button onClick={handleLogin}>Submit</button>
-            <a onClick={handleRegister}>Create an account</a>
-            {authorize ? <label>Error: incorrect credentials, please check your email and password.</label> : null}
+            <button onClick={handleSubmit}>Submit</button>
+            {authorize ? <label>Error: There is already an account with that email.</label> : null}
         </form>
     </div>
 }
-export default LoginPage;
+export default RegisterAdminPage;

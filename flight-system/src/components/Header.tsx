@@ -16,7 +16,7 @@ function Header(props: any) {
         <FontAwesomeIcon icon={faCanadianMapleLeaf} />
         <label>ALBERTA AIR</label>
             </div>
-        {props.showLogin ? <button className="login" onClick={handleLogin}>Login</button> : null}
+        {props.showLogin ? <button className="login" onClick={handleLogin}>Admin Login</button> : null}
     </div>)
 }
 

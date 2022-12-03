@@ -8,6 +8,7 @@ import BookingSummaryPage from './pages/BookingSummaryPage';
 import FlightPage from './pages/FlightPage';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
+import RegisterAdminPage from './pages/RegisterAdminPage';
 import RegisterCustomerPage from './pages/RegisterCustomerPage';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="loginCustomer" element={<BookingLoginPage/>}/>
         <Route path="summary" element={<BookingSummaryPage />} />
         <Route path="flights" element={<FlightPage />} />
+        <Route path="register" element={<RegisterAdminPage/>}/>
         <Route path="registerCustomer" element={<RegisterCustomerPage/>}/>
         <Route path="/" element={<LandingPage />} />
       </Routes>

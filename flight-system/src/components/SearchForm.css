@@ -49,6 +49,7 @@
     background-color: #005078;
     color: #fff;
     border: none;
+    font-size: medium;
 }
 
 .outline{
@@ -80,4 +81,5 @@
 .planeIcon{
     align-self: end;
     margin: 25px;
+    color: #005078;
 }
