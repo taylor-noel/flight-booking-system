@@ -29,7 +29,7 @@ async def createFlight(flight_number : str , arrival_airport: str, departure_air
     airplane_id = conn.execute(s, x= airplane_model, y= airline_carrier).first()
     s1 = text("select airport.id from airport where airport.city = :x")
     departure_id = conn.execute(s1, x= departure_airport).first()
-    arrival_id = conn.execute(s1, x= arrival_airport).first()
+    arrival_id = conn.execute(s1, x= arrival_airport).first()   
     conn.execute(flight.insert().values(
         flight_number = flights.flight_number,
         arrival_airport = arrival_id,
@@ -42,7 +42,7 @@ async def createFlight(flight_number : str , arrival_airport: str, departure_air
 
 
 ##update flight
-@flights.put("/updateFlight{flight_number}")
+@flights.put("/updateFlight/{flight_number}")
 async def updateFlight(flight_number : str , arrival_airport: int, departure_airport: int, airplane_id : int, departure_time : datetime, arrival_time : datetime):
     conn.execute(flight.update().values(
         flight_number = flights.flight_number,
