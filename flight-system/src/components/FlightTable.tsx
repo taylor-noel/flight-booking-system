@@ -1,83 +1,91 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Select from "react-select";
 import EditableRow from "./EditableRow";
 import ReadOnlyRow from "./ReadOnlyRow";
 import './Table.css';
 import { useNavigate } from 'react-router-dom';
 import SearchForm from "./SearchForm";
+import axios from "axios";
 
 
 
 function FlightTable(props: any) {
 
-    //TODO: get all value for citites, flights, and airlines from database
-    const cities = ["calgary", "victoria", "toronto"];
-    const airlines = ["Air Canada", "West Jet"];
-    const airplaneModels = ["model1", "model2"];
-    const navigate = useNavigate();
+    const [airports, setAirports] = useState<string[]>([]);
+    const [airplane_ids, setAirplaneIds] = useState<string[]>([]);
 
-    interface Flight {
-        airline: string
-        flightNumber: string,
-        departure: string,
-        arrival: string,
-        departureDate: string,
-        arrivalDate: string,
-        airplaneModel: string
+    interface Flight1 {
+        flight_number: string,
+        departure_airport: string,
+        arrival_airport: string,
+        departure_time: string,
+        arrival_time: string,
+        airplane_id: string
     }
 
-    const [formData, setFormData] = useState<Flight>({
-        "airline": '',
-        "flightNumber": '',
-        "departure": '',
-        "arrival": '',
-        "departureDate": '',
-        "arrivalDate": '',
-        "airplaneModel": ''
-    });
-
-
-    const [editFlightData, setEditFlightData] = useState<Flight>({
-        "airline": '',
-        "flightNumber": '',
-        "departure": '',
-        "arrival": '',
-        "departureDate": '',
-        "arrivalDate": '',
-        "airplaneModel": ''
-    });
-
-    const [flightData, setFlightData] = useState([{
-        "flightNumber": "AC-123",
-        "departure": "Calgary",
-        "arrival": "Toronto",
-        "departureDate": "2022-11-28 10:00:00",
-        "arrivalDate": "2022-11-28 14:00:00",
-        "airplaneModel": "123"
-    },
-    {
-        "flightNumber": "AC-124",
-        "departure": "Calgary",
-        "arrival": "Victoria",
-        "departureDate": "2022-11-28 10:00:00",
-        "arrivalDate": "2022-11-28 12:00:00",
-        "airplaneModel": "123"
+    const [flightData, setFlightData] = useState<Array<Flight1>>([{
+        airplane_id: "1",
+        arrival_airport: "1",
+        arrival_time: "2022-12-05T08:30:00",
+        departure_airport: "2",
+        departure_time : "2022-12-05T06:30:00",
+        flight_number: "1"
     }]);
+    const navigate = useNavigate();
+
+    useEffect(() =>{
+        axios.get('http://127.0.0.1:8000/getFlights')
+        .then(response => {
+            setFlightData(response.data);
+        });
+        axios.get('http://127.0.0.1:8000/getAirportCities')
+        .then(response => {
+            const cities: string[] = []
+            response.data.forEach((x: { [x: string]: any; }) =>{cities.push(x["city"])})
+            setAirports(cities);
+        });
+        axios.get('http://127.0.0.1:8000/getAirplaneModels')
+        .then(response => {
+            const models: string[] = []
+            response.data.forEach((x: { [x: string]: any; }) =>{models.push(x["name"] + "-" +x["model"])})
+            setAirplaneIds(models);
+        });
+    }, []);
+    
+
+    const [formData, setFormData] = useState<Flight1>({
+        "flight_number": '',
+        "departure_airport": '',
+        "arrival_airport": '',
+        "departure_time": '',
+        "arrival_time": '',
+        "airplane_id": ''
+    });
+
+
+    const [editFlightData, setEditFlightData] = useState<Flight1>({
+        "flight_number": '',
+        "departure_airport": '',
+        "arrival_airport": '',
+        "departure_time": '',
+        "arrival_time": '',
+        "airplane_id": ''
+    });
+
 
     const [editFlightNumber, setEditFlightNumber] = useState('');
 
     function handleEditClick(event: any, flight: any) {
-        setEditFlightNumber(flight.flightNumber);
-        const splitted = flight.flightNumber.split("-", 2);
+        setEditFlightNumber(flight.flight_number);
+        const splitted = flight.flight_number.split("-", 2);
 
         const editFlight = {
-            "airline": splitted[0],
-            "flightNumber": splitted[1],
-            "departure": flight.departure,
-            "arrival": flight.arrival,
-            "departureDate": flight.departureDate,
-            "arrivalDate": flight.arrivalDate,
-            "airplaneModel": flight.airplaneModel
+            "flight_number": splitted[1],
+            "departure_airport": flight.departure_airport,
+            "arrival_airport": flight.arrival_airport,
+            "departure_time": flight.departure_time,
+            "arrival_time": flight.arrival_time,
+            "airplane_id": flight.airplane_id
         };
 
         setEditFlightData(editFlight);
@@ -109,26 +117,24 @@ function FlightTable(props: any) {
         setEditFlightNumber('');
     }
 
+    //TODO: CHECK - not working yet
     function handleDeleteClick(event: any, flight: any) {
-        const newFlights = [...flightData];
-        const index = flightData.findIndex((flight) => flight.flightNumber === editFlightNumber);
-
-        newFlights.splice(index, 1);
-        setFlightData(newFlights);
+        axios.delete("http://127.0.0.1:8000/deleteFlight/"+ flight.flight_number)
     }
 
+    
+    //TODO: CHECK - not working yet
     function handleSaveFlight(event: any) {
-        const flightNumber = editFlightData.airline + "-" + editFlightData.flightNumber;
         const editedFlight = {
-            "flightNumber": flightNumber,
-            "departure": editFlightData.departure,
-            "arrival": editFlightData.arrival,
-            "departureDate": editFlightData.departureDate,
-            "arrivalDate": editFlightData.arrivalDate,
-            "airplaneModel": editFlightData.airplaneModel
+            "flight_number": editFlightData.flight_number,
+            "departure_airport": editFlightData.departure_airport,
+            "arrival_airport": editFlightData.arrival_airport,
+            "departure_time": editFlightData.departure_time,
+            "arrival_time": editFlightData.arrival_time,
+            "airplane_id": editFlightData.airplane_id
         }
         const newFlightData = [...flightData];
-        const index = flightData.findIndex((flight) => flight.flightNumber === editFlightNumber);
+        const index = flightData.findIndex((flight) => flight.flight_number === editFlightNumber);
         newFlightData[index] = editedFlight;
 
         setFlightData(newFlightData);
@@ -136,29 +142,33 @@ function FlightTable(props: any) {
     }
 
 
-    // TODO: update to push formdata to database
+    
+    //TODO: CHECK - not working yet
     function handleForm(event: any) {
-        const flightNumber = formData.airline + "-1";
+        const splitted = formData.airplane_id.split("-", 2);
+
+        const flight_number = splitted[0] + "-1";
         const newFlight = {
-            "flightNumber": flightNumber,
-            "departure": formData.departure,
-            "arrival": formData.arrival,
-            "departureDate": formData.departureDate,
-            "arrivalDate": formData.arrivalDate,
-            "airplaneModel": formData.airplaneModel
+            "flight_number": flight_number,
+            "departure_airport": formData.departure_airport,
+            "arrival_airport": formData.arrival_airport,
+            "departure_time": formData.departure_time,
+            "arrival_time": formData.arrival_time,
+            "airplane_model": splitted[1],
+            "airline_carrier": splitted[0]
         }
 
-        const newFlightData = [...flightData];
-        newFlightData.push(newFlight);
-        setFlightData(newFlightData);
+        axios.post("http://127.0.0.1:8000/createFlight", newFlight);
+        // const newFlightData = [...flightData];
+        // newFlightData.push(newFlight);
+        // setFlightData(newFlightData);
         setFormData({
-            "airline": '',
-            "flightNumber": '',
-            "departure": '',
-            "arrival": '',
-            "departureDate": '',
-            "arrivalDate": '',
-            "airplaneModel": ''
+            "flight_number": '',
+            "departure_airport": '',
+            "arrival_airport": '',
+            "departure_time": '',
+            "arrival_time": '',
+            "airplane_id": ''
         })
     }
 
@@ -166,14 +176,15 @@ function FlightTable(props: any) {
         navigate('/loginCustomer');
     }
 
+    //TODO: CHECK - not working yet
     function handleDepartFilter() {
         //TODO: call to the database
     }
 
+    //TODO: CHECK - not working yet
     function handleArriveFilter() {
         //TODO: call to the database
     }
-
     return <div>
 
         <h3>Flights</h3>
@@ -207,7 +218,7 @@ function FlightTable(props: any) {
             <tbody>
                 {flightData.map((flight) => (
                     <Fragment>
-                        {editFlightNumber === flight.flightNumber ?
+                        {editFlightNumber === flight.flight_number ?
                             <EditableRow
                                 editFlightData={editFlightData}
                                 handleEditFlightChange={handleEditFlightChange}
@@ -231,36 +242,27 @@ function FlightTable(props: any) {
                 <h3>Add a Flight</h3>
                 <form className="addForm" onSubmit={handleForm}>
                     <div className="formItem">
-                        <label>Airline Carrier</label>
-                        <Select
-                            placeholder="Carrier"
-                            options={airlines.map(t => ({ value: 'airline', label: t }))}
-                            required={true}
-                            onChange={handleChange} />
-                    </div>
-
-                    <div className="formItem">
                         <label>Departure City</label>
                         <Select
-                            name="departure"
+                            name="departure_airport"
                             placeholder="Departure City"
-                            options={cities.map(t => ({ value: 'departure', label: t }))}
+                            options={airports.map(t => ({ value: 'departure_airport', label: t }))}
                             required={true}
                             onChange={handleChange} />
                     </div>
                     <div className="formItem">
                         <label>Arrival City</label>
                         <Select
-                            name="arrival"
+                            name="arrival_airport"
                             placeholder="Arrival City"
-                            options={cities.map(t => ({ value: 'arrival', label: t }))}
+                            options={airports.map(t => ({ value: 'arrival_airport', label: t }))}
                             required={true}
                             onChange={handleChange} />
                     </div>
                     <div className="formItem">
                         <label>Departure Date</label>
                         <input
-                            name="departureDate"
+                            name="departure_time"
                             type="datetime-local"
                             required={true}
                             onChange={handleDateChange} />
@@ -268,7 +270,7 @@ function FlightTable(props: any) {
                     <div className="formItem">
                         <label>Arrival Date</label>
                         <input
-                            name="arrivalDate"
+                            name="arrival_time"
                             type="datetime-local"
                             required={true}
                             onChange={handleDateChange} />
@@ -276,9 +278,9 @@ function FlightTable(props: any) {
                     <div className="formItem">
                         <label>Airplane Model</label>
                         <Select
-                            name="airplaneModel"
+                            name="airplane_id"
                             placeholder="Airplane Model"
-                            options={airplaneModels.map(t => ({ value: 'airplaneModel', label: t }))}
+                            options={airplane_ids.map(t => ({ value: 'airplane_id', label: t }))}
                             required={true}
                             onChange={handleChange} />
                     </div>

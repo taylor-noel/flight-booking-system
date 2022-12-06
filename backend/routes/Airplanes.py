@@ -3,6 +3,7 @@ from config.db import conn
 from models.models import airplane
 from schemas.index import Airplane
 from datetime import date
+from sqlalchemy.sql import text
 
 
 airplanes = APIRouter()
@@ -11,6 +12,12 @@ airplanes = APIRouter()
 @airplanes.get("/getAirplanes")
 async def getAirplanes():
     return conn.execute(airplane.select()).fetchall()
+
+ ## Get all airplane model names
+@airplanes.get("/getAirplaneModels")
+async def getAirplaneModels():
+    s = text("select airplane.model, airplane_carrier.name from airplane join airplane_carrier on airplane.carrier_id = airplane_carrier.id")
+    return conn.execute(s).fetchall()
 
 ## select for one airplane by id
 @airplanes.get("/selectAirplane{id}")

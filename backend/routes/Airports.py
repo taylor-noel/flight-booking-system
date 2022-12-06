@@ -3,6 +3,7 @@ from config.db import conn
 from models.models import airport
 from schemas.index import Airport
 from datetime import date
+from sqlalchemy.sql import text
 
 
 airports = APIRouter()
@@ -11,6 +12,12 @@ airports = APIRouter()
 @airports.get("/getAirports")
 async def getAirports():
     return conn.execute(airport.select()).fetchall()
+
+## get all airport cities
+@airports.get("/getAirportCities")
+async def getAirportCities():
+    s = text("select airport.city from airport")
+    return conn.execute(s).fetchall()
 
 ## select for one airport by id 
 @airports.get("/selectAirport{id}")

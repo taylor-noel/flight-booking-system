@@ -3,12 +3,12 @@ import React from 'react';
 const ReadOnlyRow = (props:any) => {
     return (
         <tr>
-            <td>{props.flight.flightNumber}</td>
-            <td>{props.flight.departure}</td>
-            <td>{props.flight.arrival}</td>
-            <td>{props.flight.departureDate}</td>
-            <td>{props.flight.arrivalDate}</td>
-            <td>{props.flight.airplaneModel}</td>
+            <td>{props.flight.flight_number}</td>
+            <td>{props.flight.departure_airport}</td>
+            <td>{props.flight.arrival_airport}</td>
+            <td>{props.flight.departure_time}</td>
+            <td>{props.flight.arrival_time}</td>
+            <td>{props.flight.airplane_id}</td>
             {props.admin ? 
             <td><button type="button" onClick={(event) => props.handleEditClick(event, props.flight)}>Edit</button>
             <button type="button" onClick={(event) => props.handleDeleteClick(event, props.flight)}>Delete</button></td>
