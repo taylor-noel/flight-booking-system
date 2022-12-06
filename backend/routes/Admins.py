@@ -29,9 +29,8 @@ async def selectAdmin(email: str):
 # create new admin
 @admins.put("/createAdmin")
 async def createAdmin(emails: str, password: str):
-    s = text("insert into admin (email, password) values (:email, :password)")
-    return conn.execute(s, email = emails, password = password)
-   
+    s = text("insert into admin (email, password) values (:emails, :password)")
+    return conn.execute(s, emails = emails, password = password)
 
 
 # update admin
