@@ -23,8 +23,8 @@ app.add_middleware(
 )
 
 
-app.include_router(customers)
 app.include_router(admins)
+app.include_router(customers)
 app.include_router(flights)
 app.include_router(airplanecarriers)
 app.include_router(airplanes)

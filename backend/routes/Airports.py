@@ -25,25 +25,16 @@ async def selectAirport(id: int):
     return conn.execute(airport.select().where(airport.c.id == id)).first()
 
 ## create new airport
-@airports.post("/createAirport")
+@airports.put("/createAirport")
 async def createAirport(id: int, city: str, name: str, country: str):
-    conn.execute(airport.insert().values(
-        id = airports.id,
-        city = airports.city,
-        name = airports.name,
-        country = airports.country
-    ))
-    return conn.execute(airport.select()).fetchall()
+    s = text("insert into airport (id, city, name, country) values (:id, :city, :name, :country)")
+    return conn.execute(s, id = id, city = city, name = name, country = country)
 
 ## update airport
-@airports.put("/updateAirport{id}")
+@airports.post("/updateAirport{id}")
 async def updateAirport(id: int, city: str, name: str, country: str):
-    conn.execute(airport.update().values(
-        city = airports.city,
-        name = airports.name,
-        country = airports.country
-    ).where(airport.c.id == id))
-    return conn.execute(airport.select()).fetchall()
+    s = text("update airport set city = :city, name = :name, country = :country where id = :id")
+    return conn.execute(s, id = id, city = city, name = name, country = country)
 
 ## delete airport
 @airports.delete("/deleteAirport{id}")

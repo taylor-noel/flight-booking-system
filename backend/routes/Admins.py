@@ -27,21 +27,18 @@ async def selectAdmin(email: str):
 
 
 # create new admin
-@admins.post("/createAdmin")
-async def createAdmin(email: str, password: str):
-    conn.execute(admin.insert().values(
-        email = admins.email,
-        password = admins.password
-    ))
-    return conn.execute(admin.select()).fetchall()
+@admins.put("/createAdmin")
+async def createAdmin(emails: str, password: str):
+    s = text("insert into admin (email, password) values (:email, :password)")
+    return conn.execute(s, email = emails, password = password)
+   
+
 
 # update admin
-@admins.put("/updateAdmin{email}")
+@admins.post("/updateAdmin{email}")
 async def updateAdmin(email: str, password: str):
-    conn.execute(admin.update().values(
-        password = admins.password
-    ).where(admin.c.email == email))
-    return conn.execute(admin.select()).fetchall()
+    s = text("update admin set password = :password where email = :email")
+    return conn.execute(s, email = email, password = password)
 
 # delete admin
 @admins.delete("/deleteAdmin{email}")
