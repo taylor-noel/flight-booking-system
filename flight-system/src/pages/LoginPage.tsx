@@ -26,7 +26,7 @@ function LoginPage() {
         axios.get('http://127.0.0.1:8000/selectAdmin' + email.value)
         .then(response => { 
             if (response.data.password === password.value) {
-                navigate('/admin');
+                navigate('/admin', {state:{}});
             }
         });
        
