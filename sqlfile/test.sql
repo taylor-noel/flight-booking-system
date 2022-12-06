@@ -67,6 +67,18 @@
     INSERT INTO airport VALUES(37, 'Egypt', 'Alexandria International Airport', 'Egypt');
 
 
+
+ DROP TABLE IF EXISTS AIRLINE_CARRIER;
+    CREATE TABLE AIRLINE_CARRIER(
+        id int not null,
+        email varchar(255) not null,
+        address varchar(255) not null,
+        phone varchar(14) not null,
+        name varchar(25) not null,
+        primary key(id)
+    );
+    
+    
     DROP TABLE IF EXISTS airplane;
     CREATE TABLE airplane(
         id int not null,
@@ -74,7 +86,8 @@
         rowss int not null,
         seats_per_row int not null,
         carrier_id int not null,
-        primary key(id)
+        primary key(id),
+       foreign key(carrier_id) references airplane_carrier(id)
     );
 
   
@@ -123,17 +136,19 @@
     DROP TABLE IF EXISTS flight;
     CREATE TABLE flight(
         flight_number varchar(50) not null,
-        arrival_airport varchar(50) not null,
-        departure_airport varchar(50) not null,
+        arrival_airport int not null,
+        departure_airport int not null,
         airplane_id int not null,
         departure_time datetime not null,
         arrival_time datetime not null,
         primary key(flight_number),
-        foreign key(airplane_id) references airplane(id)
+        foreign key(airplane_id) references airplane(id),
+        foreign key(arrival_airport) references airport(id),
+        foreign key(departure_airport) references airport(id)
     );
 
 
-    INSERT INTO flight VALUES("F001", "Tokyo", "Mexico City", 1, "2020-01-01", "2020-01-02");
+    INSERT INTO flight VALUES("WS-001", 1, 2, 1, "2020-01-01", "2020-01-02");
 
   
     DROP TABLE IF EXISTS admin;
@@ -149,15 +164,7 @@
 
 
     
-    DROP TABLE IF EXISTS AIRPLANE_CARRIER;
-    CREATE TABLE AIRPLANE_CARRIER(
-        id int not null,
-        email varchar(255) not null,
-        address varchar(255) not null,
-        phone varchar(14) not null,
-        name varchar(25) not null,
-        primary key(id)
-    );
+   
 
 
 
