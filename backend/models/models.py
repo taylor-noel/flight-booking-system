@@ -5,7 +5,7 @@ from config.db import meta
 
 customer = Table(
     'customer', meta,
-    Column('passport_number', String(6), primary_key=True),
+    Column('passport_number', String(50), primary_key=True),
     Column('phone', String(14)),
     Column('email', String(255)),
     Column('fname', String(15)),
@@ -19,9 +19,9 @@ customer = Table(
 airport = Table(
     'airport', meta,
     Column('id', Integer, primary_key=True),
-    Column('city', String(25)), 
-    Column('name', String(25)),
-    Column('country', String(25))
+    Column('city', String(50)), 
+    Column('name', String(50)),
+    Column('country', String(50))
 )
 
 
@@ -29,9 +29,9 @@ airport = Table(
 boarding_pass = Table(
     'boarding_pass', meta,
     Column('id', Integer, primary_key=True),
-    Column('passport_number', String(6), ForeignKey('customer.passport_number')),
-    Column('flight_number', String(6), ForeignKey('flight.flight_number')),
-    Column('departure_gate', String(3)),
+    Column('passport_number', String(50), ForeignKey('customer.passport_number')),
+    Column('flight_number', String(50)),
+    Column('departure_gate', String(50)),
     Column('airplane_id', Integer),
     Column('seat_letter', String(1)),
     Column('seat_number', Integer)
@@ -40,27 +40,27 @@ boarding_pass = Table(
 
 flight_booked = Table(
     'flight_booked', meta,
-    Column('boarding_id', Integer, ForeignKey('boarding_pass.id')),
-    Column('passport_number', String(6), ForeignKey('customer.passport_number')),
-    Column('flight_number', String(6)),
-    Column('primary_key', Integer, primary_key=True)
+    Column('boarding_id', Integer, primary_key=True),
+    Column('passport_number', String(50), ForeignKey('customer.passport_number')),
+    Column('flight_number', String(50)),
+    
 )
 
 
 seat = Table(
     'seat', meta,
-    Column('airplane_id', Integer, ForeignKey('airplane.id')),
-    Column('letter', String(1)),
-    Column('number', Integer),
-    Column('primary_key', Integer, primary_key=True)
+    Column('airplane_id', Integer, primary_key=True),
+    Column('letter', String(50), primary_key=True),
+    Column('number', Integer, primary_key=True),
+
 )
 
 
 flight = Table(
     'flight', meta,
-    Column('flight_number', String(6), primary_key=True),
-    Column('arrival_airport', Integer),
-    Column('departure_airport', Integer),
+    Column('flight_number', String(50), primary_key=True),
+    Column('arrival_airport', String(50)),
+    Column('departure_airport', String(50)),
     Column('airplane_id', Integer, ForeignKey('airplane.id')),
     Column('departure_time', DateTime),
     Column('arrival_time', DateTime)
