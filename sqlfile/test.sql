@@ -147,8 +147,6 @@
     INSERT INTO admin VALUES("admin@admin.com", "admin");
 
 
-
-    
     DROP TABLE IF EXISTS AIRPLANE_CARRIER;
     CREATE TABLE AIRPLANE_CARRIER(
         id int not null,
