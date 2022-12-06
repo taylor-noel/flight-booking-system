@@ -2,6 +2,7 @@ import './LoginPage.css';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Header from '../components/Header';
+import axios from 'axios';
 
 function LoginPage() {
     const [authorize, setAuthorize] = useState(false);
@@ -11,33 +12,43 @@ function LoginPage() {
     const navigate = useNavigate();
 
     function handleEmail(event: any) {
+        event.preventDefault();
         setEmail({ value: event.target.value });
     }
     function handlePassword(event: any) {
+        event.preventDefault();
+
         setPassword({ value: event.target.value });
     }
     function handleLogin(event: any) {
-        //TODO: authorize credentials
-        if (email.value === "taylor") {
-            navigate('/admin');
-        }
-        else {
-            setAuthorize(true);
-        }
+        event.preventDefault();
+        console.log(email.value)
+        console.log(password.value)
+
+        axios.get('http://127.0.0.1:8000/selectAdmin' + email.value)
+        .then(response => { 
+            if (response.data.password === password.value) {
+                navigate('/admin');
+            }
+        });
+       
+        setAuthorize(true);
 
     }
 
-    function handleRegister(){
+
+    function handleRegister() {
         navigate('/register');
     }
 
     return <div className="loginPage">
-        <Header showLogin={false}/>
-        <form className="loginForm">
+        <Header showLogin={false} />
+        <form className="loginForm" id="form" onSubmit={handleLogin}>
             <label className="title">Login</label>
             <label>Email Address</label>
             <input
                 type="email"
+                name="email"
                 value={email.value}
                 placeholder="Enter email"
                 onChange={handleEmail}
@@ -45,12 +56,13 @@ function LoginPage() {
             <label>Password</label>
             <input
                 type="password"
+                name="password"
                 value={password.value}
                 placeholder="Enter password"
                 onChange={handlePassword}
             />
-            <button onClick={handleLogin}>Submit</button>
-            <a className ="link" onClick={handleRegister}>Create an account</a>
+            <button type="submit">Submit</button>
+            <a className="link" onClick={handleRegister}>Create an account</a>
             {authorize ? <label>Error: incorrect credentials, please check your email and password.</label> : null}
         </form>
     </div>
