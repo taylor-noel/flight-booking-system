@@ -3,12 +3,12 @@ import React from 'react';
 const EditableRow = (props: any) => {
     return (
         <tr>
-            <td>{props.editFlightData.airline + "-" + props.editFlightData.flightNumber}</td>
+            <td>{props.editFlightData.flight_number}</td>
             <td>
                 <input
                     type="text"
                     required={true}
-                    value={props.editFlightData.departure}
+                    value={props.editFlightData.departure_airport}
                     onChange={props.handleEditFlightChange}
                     name="departure"></input>
             </td>
@@ -16,7 +16,7 @@ const EditableRow = (props: any) => {
                 <input
                     type="text"
                     required={true}
-                    value={props.editFlightData.arrival}
+                    value={props.editFlightData.arrival_airport}
                     onChange={props.handleEditFlightChange}
                     name="arrival"></input>
             </td>
@@ -24,7 +24,7 @@ const EditableRow = (props: any) => {
                 <input
                     type="datetime-local"
                     required={true}
-                    value={props.editFlightData.departureDate}
+                    value={props.editFlightData.departure_time}
                     onChange={props.handleEditFlightChange}
                     name="departureDate"></input>
             </td>
@@ -32,7 +32,7 @@ const EditableRow = (props: any) => {
                 <input
                     type="datetime-local"
                     required={true}
-                    value={props.editFlightData.arrivalDate}
+                    value={props.editFlightData.arrival_time}
                     onChange={props.handleEditFlightChange}
                     name="arrivalDate"></input>
             </td>
@@ -40,7 +40,7 @@ const EditableRow = (props: any) => {
                 <input
                     type="text"
                     required={true}
-                    value={props.editFlightData.airplaneModel}
+                    value={props.editFlightData.airplane_model}
                     onChange={props.handleEditFlightChange}
                     name="airplaneModel"></input>
             </td>

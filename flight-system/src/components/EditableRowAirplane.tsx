@@ -9,15 +9,15 @@ const EditableRowAirplane = (props: any) => {
                     type="text"
                     required={true}
                     value={props.airplane.model}
-                    onChange={props.handleEditFlightChange}
+                    onChange={props.handleEditAirplaneChange}
                     name="model"></input>
             </td>
             <td>
                 <input
                     type="number"
                     required={true}
-                    value={props.airplane.rows}
-                    onChange={props.handleEditFlightChange}
+                    value={props.airplane.rowss}
+                    onChange={props.handleEditAirplaneChange}
                     name="rows"></input>
             </td>
             <td>
@@ -25,7 +25,7 @@ const EditableRowAirplane = (props: any) => {
                     type="number"
                     required={true}
                     value={props.airplane.seats_per_row}
-                    onChange={props.handleEditFlightChange}
+                    onChange={props.handleEditAirplaneChange}
                     name="seats_per_row"></input>
             </td>
             <td>
@@ -33,13 +33,13 @@ const EditableRowAirplane = (props: any) => {
                     type="text"
                     required={true}
                     value={props.airplane.carrier_name}
-                    onChange={props.handleEditFlightChange}
+                    onChange={props.handleEditAirplaneChange}
                     name="carrier_name"></input>
             </td>
             {props.admin ?
                 <td>
-                    <button onClick={props.handleSaveFlight}>Save</button>
-                    <button type="button" onClick={props.handleCancelFlight}>Cancel</button>
+                    <button onClick={props.handleSaveAirplane}>Save</button>
+                    <button type="button" onClick={props.handleCancelAirplane}>Cancel</button>
                 </td>
                 :
                 null

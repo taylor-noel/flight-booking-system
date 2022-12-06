@@ -136,6 +136,9 @@ function FlightTable(props: any) {
     //TODO: CHECK - not working yet
     function handleDeleteClick(event: any, flight: any) {
         axios.delete("http://127.0.0.1:8000/deleteFlight/"+ flight.flight_number)
+        .then(response => {
+            setFlightData(response.data);
+        })
     }
 
     

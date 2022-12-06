@@ -13,6 +13,10 @@ airplanes = APIRouter()
 async def getAirplanes():
     return conn.execute(airplane.select()).fetchall()
 
+@airplanes.get("/getAirplanesFormatted")
+async def getAirplanesFormatted():
+    s = text("select airplane.id,model,rowss, seats_per_row, carrier.name as carrier_name from airplane join airplane_carrier as carrier on carrier.id = carrier_id")
+    return conn.execute(s).fetchall()
  ## Get all airplane model names
 @airplanes.get("/getAirplaneModels")
 async def getAirplaneModels():
@@ -30,7 +34,7 @@ async def createAirplane(id: int, model: str, rows : int, seats_per_row: int, ca
     conn.execute(airplane.insert().values(
         id = airplanes.id,
         model = airplanes.model,
-        rows = airplanes.rows,
+        number_of_row = airplanes.rows,
         seats_per_row = airplanes.seats_per_row,
         carrier_id = airplanes.carrier_id
     ))
@@ -41,7 +45,7 @@ async def createAirplane(id: int, model: str, rows : int, seats_per_row: int, ca
 async def updateAirplane(id: int, model: str, rows : int, seats_per_row: int, carrier_id: int):
     conn.execute(airplane.update().values(
         model = airplanes.model,
-        rows = airplanes.rows,
+        number_of_row = airplanes.rows,
         seats_per_row = airplanes.seats_per_row,
         carrier_id = airplanes.carrier_id
     ).where(airplane.c.id == id))
@@ -51,4 +55,5 @@ async def updateAirplane(id: int, model: str, rows : int, seats_per_row: int, ca
 @airplanes.delete("/deleteAirplane{id}")
 async def deleteAirplane(id: int):
     conn.execute(airplane.delete().where(airplane.c.id == id))
-    return conn.execute(airplane.select()).fetchall()
+    s = text("select airplane.id,model,rowss, seats_per_row, carrier.name as carrier_name from airplane join airplane_carrier as carrier on carrier.id = carrier_id")
+    return conn.execute(s).fetchall()

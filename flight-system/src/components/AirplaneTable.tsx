@@ -1,48 +1,65 @@
-import { Fragment, useState } from "react";
+import axios from "axios";
+import { Fragment, useEffect, useState } from "react";
 import Select from "react-select";
 import EditableRow from "./EditableRow";
+import EditableRowAirplane from "./EditableRowAirplane";
 import ReadOnlyRowAirplane from "./ReadOnlyRowAirplane";
 import './Table.css';
 
 function AirplaneTable(props: any) {
-
-    //TODO: get all value for citites, airplanes, and airlines from database
-    const carriers = ["Air Canada", "West Jet"];
-
     interface Airplane {
-        "id": string,
+        "id": number,
         "model": string,
-        "rows": string,
-        "seats_per_row": string,
+        "rowss": number,
+        "seats_per_row": number,
         "carrier_name": string
     }
 
-    const [formData, setFormData] = useState<Airplane>({
-        "id": '',
+    //TODO: get all value for citites, airplanes, and airlines from database
+    const [carriers, setCarriers] = useState<string[]>([]); 
+    const [airplaneData, setAirplaneData] = useState<Airplane[]>([{
+        "id": 0,
         "model": '',
-        "rows": '',
-        "seats_per_row": '',
+        "rowss": 0,
+        "seats_per_row": 0,
+        "carrier_name": ''
+    }]);
+
+    useEffect(() =>{
+
+            axios.get('http://127.0.0.1:8000/getAirplaneCarrierNames')
+            .then(response => {
+                const airlines: string[] = []
+            response.data.forEach((x: { [x: string]: any; }) =>{airlines.push(x["name"])})
+            setCarriers(airlines);
+            });
+            axios.get('http://127.0.0.1:8000/getAirplanesFormatted')
+            .then(response => {
+             setAirplaneData(response.data);
+            });
+
+    }, []);
+
+    const [formData, setFormData] = useState<Airplane>({
+        "id": 0,
+        "model": '',
+        "rowss": 0,
+        "seats_per_row": 0,
         "carrier_name": ''
     });
 
 
     const [editAirplaneData, setEditAirplaneData] = useState<Airplane>({
-        "id": '',
+        "id": 0,
         "model": '',
-        "rows": '',
-        "seats_per_row": '',
+        "rowss": 0,
+        "seats_per_row": 0,
         "carrier_name": ''
     });
 
-    const [airplaneData, setAirplaneData] = useState([{
-        "id": '1',
-        "model": "model1",
-        "rows": '10',
-        "seats_per_row": '4',
-        "carrier_name": 'Air Canada'
-    }]);
+    
 
-    const [editAirplaneNumber, setEditAirplaneNumber] = useState('');
+    const [editAirplaneNumber, setEditAirplaneNumber] = useState(0);
 
     function handleEditClick(event: any, airplane: any) {
         setEditAirplaneNumber(airplane.id);
@@ -51,7 +68,7 @@ function AirplaneTable(props: any) {
     }
 
     function handleEditAirplaneChange(event: any) {
-        const newAirplaneData = { ...editAirplaneData };
+        const newAirplaneData:any = { ...editAirplaneData };
         newAirplaneData[event.target.name as keyof typeof editAirplaneData] = event.target.value;
 
         setEditAirplaneData(newAirplaneData);
@@ -59,36 +76,35 @@ function AirplaneTable(props: any) {
     }
 
     function handleChange(event: any) {
-        const newFormData = { ...formData };
+        const newFormData:any = { ...formData };
         newFormData[event.target.name as keyof typeof formData] = event.target.value;
 
         setFormData(newFormData);
     }
 
     function handleSelectChange(options: any) {
-        const newFormData = { ...formData };
+        const newFormData:any = { ...formData };
         newFormData[options.value as keyof typeof formData] = options.label;
 
         setFormData(newFormData);
     }
 
     function handleCancelAirplane() {
-        setEditAirplaneNumber('');
+        setEditAirplaneNumber(0);
     }
 
     function handleDeleteClick(event: any, airplane: any) {
-        const newAirplanes = [...airplaneData];
-        const index = airplaneData.findIndex((airplane) => airplane.id === editAirplaneNumber);
-
-        newAirplanes.splice(index, 1);
-        setAirplaneData(newAirplanes);
+        axios.delete('http://127.0.0.1:8000/deleteAirplane' + airplane.id)
+        .then(response => {
+            setAirplaneData(response.data);
+        });
     }
 
     function handleSaveAirplane(event: any) {
         const editedAirplane = {
             id: editAirplaneData.id,
             model: editAirplaneData.model,
-            rows: editAirplaneData.rows,
+            rowss: editAirplaneData.rowss,
             seats_per_row: editAirplaneData.seats_per_row,
             carrier_name: editAirplaneData.carrier_name
         }
@@ -97,16 +113,16 @@ function AirplaneTable(props: any) {
         newAirplaneData[index] = editedAirplane;
 
         setAirplaneData(newAirplaneData);
-        setEditAirplaneNumber('');
+        setEditAirplaneNumber(0);
     }
 
 
     // TODO: update to push formdata to database
     function handleForm(event: any) {
         const newAirplane = {
-            id: "2",
+            id: 2,
             model: formData.model,
-            rows: formData.rows,
+            rowss: formData.rowss,
             seats_per_row: formData.seats_per_row,
             carrier_name: formData.carrier_name
         }
@@ -115,10 +131,10 @@ function AirplaneTable(props: any) {
         newAirplaneData.push(newAirplane);
         setAirplaneData(newAirplaneData);
         setFormData({
-            id: '',
+            id: 0,
             model: '',
-            rows: '',
-            seats_per_row: '',
+            rowss: 0,
+            seats_per_row: 0,
             carrier_name: ''
         })
     }
@@ -140,11 +156,11 @@ function AirplaneTable(props: any) {
                 {airplaneData.map((airplane) => (
                     <Fragment>
                         {editAirplaneNumber === airplane.id ?
-                            <EditableRow
-                                editFlightData={editAirplaneData}
-                                handleEditFlightChange={handleEditAirplaneChange}
-                                handleSaveFlight={handleSaveAirplane}
-                                handleCancelFlight={handleCancelAirplane}
+                            <EditableRowAirplane
+                                airplane={editAirplaneData}
+                                handleEditAirplaneChange={handleEditAirplaneChange}
+                                handleSaveAirplane={handleSaveAirplane}
+                                handleCancelAirplane={handleCancelAirplane}
                                 admin={props.admin}
                             />
                             :
@@ -173,7 +189,7 @@ function AirplaneTable(props: any) {
             <div className="formItem">
                 <label>Number of Rows</label>
                 <input
-                    name="rows"
+                    name="rowss"
                     type="number"
                     placeholder="30"
                     required={true}

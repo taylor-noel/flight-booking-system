@@ -64,6 +64,6 @@ async def updateFlight(flight_number : str , arrival_airport: int, departure_air
 ##delete flight
 @flights.delete("/deleteFlight/{flight_number}")
 async def deleteFlight(flight_number: str):
-    print(flight_number)
+    s = text("select flight.flight_number, arrival.city as arrival_airport, departure.city as departure_airport, arrival_time, departure_time, airplane.model as airplane_id from flight join airport as arrival on arrival.id = flight.arrival_airport join airport as departure on departure.id = flight.departure_airport join airplane on airplane.id = flight.airplane_id")
     conn.execute(flight.delete().where(flight.c.flight_number == flight_number))
-    return conn.execute(flight.select()).fetchall()
+    return conn.execute(s).fetchall()
