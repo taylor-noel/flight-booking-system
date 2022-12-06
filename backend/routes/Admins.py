@@ -3,6 +3,7 @@ from config.db import conn
 from models.models import admin
 from schemas.index import Admin
 from datetime import date
+from sqlalchemy.sql import text
 
 
 admins = APIRouter()
@@ -11,6 +12,12 @@ admins = APIRouter()
 @admins.get("/getAdmins")
 async def getAdmins():
     return conn.execute(admin.select()).fetchall()
+
+# Get all Admin Emails
+@admins.get("/getAdminEmails")
+async def getAdminEmails():
+    s = text("select email from admin")
+    return conn.execute(s).fetchall()
 
 
 # select admin by email

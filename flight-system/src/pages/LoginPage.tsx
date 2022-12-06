@@ -22,8 +22,6 @@ function LoginPage() {
     }
     function handleLogin(event: any) {
         event.preventDefault();
-        console.log(email.value)
-        console.log(password.value)
 
         axios.get('http://127.0.0.1:8000/selectAdmin' + email.value)
         .then(response => { 
