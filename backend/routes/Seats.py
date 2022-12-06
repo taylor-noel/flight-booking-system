@@ -3,6 +3,7 @@ from config.db import conn
 from models.models import seat
 from schemas.index import Seat
 from datetime import date, datetime
+from sqlalchemy.sql import text
 
 seats = APIRouter()
 
@@ -19,24 +20,15 @@ async def selectSeat(airplane_id: int):
 
 
 ## create new seat
-@seats.post("/createSeat")
+@seats.put("/createSeat")
 async def createSeat(airplane_id: int, letter: str, number: int):
-    conn.execute(seat.insert().values(
-        airplane_id = seats.airplane_id,
-        letter = seats.letter,
-        number = seats.number
-    ))
-    return conn.execute(seat.select()).fetchall()
-
+    s = text("insert into seat (airplane_id, letter, number) values (:airplane_id, :letter, :number)")
+    return conn.execute(s, airplane_id = airplane_id, letter = letter, number = number)
 ## update seat
-@seats.put("/updateSeat{airplane_id}")
+@seats.post("/updateSeat{airplane_id}")
 async def updateSeat(airplane_id: int, letter: str, number: int):
-    conn.execute(seat.update().values(
-        letter = seats.letter,
-        number = seats.number
-    ).where(seat.c.airplane_id == airplane_id))
-    return conn.execute(seat.select()).fetchall()
-
+    s = text("update seat set letter = :letter, number = :number where airplane_id = :airplane_id")
+    return conn.execute(s, airplane_id = airplane_id, letter = letter, number = number)
 ## delete seat
 @seats.delete("/deleteSeat{airplane_id}")
 async def deleteSeat(airplane_id: int):

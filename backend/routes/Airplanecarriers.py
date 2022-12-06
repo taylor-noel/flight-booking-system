@@ -27,27 +27,15 @@ async def selectAirplaneCarrier(id: int):
 
 
 ## create new airplane carrier
-@airplanecarriers.post("/createAirplaneCarrier")
+@airplanecarriers.put("/createAirplaneCarrier")
 async def createAirplaneCarrier(id: int, email: str, address: str, phone: str, name: str):
-    conn.execute(airplane_carrier.insert().values(
-        id = airplanecarriers.id,
-        email = airplanecarriers.email,
-        address = airplanecarriers.address,
-        phone = airplanecarriers.phone,
-        name = airplanecarriers.name
-    ))
-    return conn.execute(airplane_carrier.select()).fetchall()
-
+    s = text("insert into airplane_carrier (id, email, address, phone, name) values (:id, :email, :address, :phone, :name)")
+    return conn.execute(s, id = id, email = email, address = address, phone = phone, name = name)
 ## update airplane carrier
-@airplanecarriers.put("/updateAirplaneCarrier{id}")
+@airplanecarriers.post("/updateAirplaneCarrier{id}")
 async def updateAirplaneCarrier(id: int, email: str, address: str, phone: str, name: str):
-    conn.execute(airplane_carrier.update().values(
-        email = airplanecarriers.email,
-        address = airplanecarriers.address,
-        phone = airplanecarriers.phone,
-        name = airplanecarriers.name
-    ).where(airplane_carrier.c.id == id))
-    return conn.execute(airplane_carrier.select()).fetchall()
+    s = text("update airplane_carrier set email = :email, address = :address, phone = :phone, name = :name where id = :id")
+    return conn.execute(s, id = id, email = email, address = address, phone = phone, name = name)
 
 ## delete airplane carrier
 @airplanecarriers.delete("/deleteAirplaneCarrier{id}")

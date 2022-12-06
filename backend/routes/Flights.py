@@ -11,8 +11,7 @@ flights = APIRouter()
 ## GET ALL FLIGHTS
 @flights.get("/getFlights")
 async def getFlights():
-    s = text("select flight.flight_number, arrival.city as arrival_airport, departure.city as departure_airport, arrival_time, departure_time, airplane.model as airplane_id from flight join airport as arrival on arrival.id = flight.arrival_airport join airport as departure on departure.id = flight.departure_airport join airplane on airplane.id = flight.airplane_id")
-    return conn.execute(s).fetchall()
+    return conn.execute(flight.select()).fetchall()
 
 ## GET ALL FLIGHTS by search
 @flights.get("/getFlightsBySearch/departure={departure}arrival={arrival}date={date}")
@@ -21,11 +20,18 @@ async def getFlightsBySearch(departure:str, arrival: str, date: str):
     return conn.execute(s, x=departure, y=arrival, z=date).fetchall()
 
 
+
+
+# ##select flight by flight_number
+# @flights.get("/selectFlight{flight_number}")
+# async def selectFlight(flight_number: str):
+#     s = text("select flight.flight_number, arrival.city as arrival_airport, departure.city as departure_airport, arrival_time, departure_time, airplane.model as airplane_id from flight join airport as arrival on arrival.id = flight.arrival_airport join airport as departure on departure.id = flight.departure_airport join airplane on airplane.id = flight.airplane_id where flight_number = :x")
+#     return conn.execute(s, x=flight_number).first()
+
 ##select flight by flight_number
 @flights.get("/selectFlight{flight_number}")
 async def selectFlight(flight_number: str):
-    s = text("select flight.flight_number, arrival.city as arrival_airport, departure.city as departure_airport, arrival_time, departure_time, airplane.model as airplane_id from flight join airport as arrival on arrival.id = flight.arrival_airport join airport as departure on departure.id = flight.departure_airport join airplane on airplane.id = flight.airplane_id where flight_number = :x")
-    return conn.execute(s, x=flight_number).first()
+    return conn.execute(flight.select().where(flight.c.flight_number == flight_number)).first()
 
 
 ##create new flight

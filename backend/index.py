@@ -10,8 +10,6 @@ from routes.index import airports
 from routes.index import seats
 from fastapi.middleware.cors import CORSMiddleware
 
-from fastapi.middleware.cors import CORSMiddleware
-
 app = FastAPI()
 
 origins = ["*"]
@@ -25,8 +23,8 @@ app.add_middleware(
 )
 
 
-app.include_router(customers)
 app.include_router(admins)
+app.include_router(customers)
 app.include_router(flights)
 app.include_router(airplanecarriers)
 app.include_router(airplanes)

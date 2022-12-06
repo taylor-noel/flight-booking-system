@@ -29,28 +29,16 @@ async def selectAirplane(id: int):
     return conn.execute(airplane.select().where(airplane.c.id == id)).first()
 
 ## create new airplane
-@airplanes.post("/createAirplane")
+@airplanes.put("/createAirplane")
 async def createAirplane(id: int, model: str, rows : int, seats_per_row: int, carrier_id: int):
-    conn.execute(airplane.insert().values(
-        id = airplanes.id,
-        model = airplanes.model,
-        number_of_row = airplanes.rows,
-        seats_per_row = airplanes.seats_per_row,
-        carrier_id = airplanes.carrier_id
-    ))
-    return conn.execute(airplane.select()).fetchall()
+    s = text("insert into airplane (id, model, rows, seats_per_row, carrier_id) values (:id, :model, :rows, :seats_per_row, :carrier_id)")
+    return conn.execute(s, id = id, model = model, rows = rows, seats_per_row = seats_per_row, carrier_id = carrier_id)
 
 ## update airplane
-@airplanes.put("/updateAirplane{id}")
+@airplanes.post("/updateAirplane{id}")
 async def updateAirplane(id: int, model: str, rows : int, seats_per_row: int, carrier_id: int):
-    conn.execute(airplane.update().values(
-        model = airplanes.model,
-        number_of_row = airplanes.rows,
-        seats_per_row = airplanes.seats_per_row,
-        carrier_id = airplanes.carrier_id
-    ).where(airplane.c.id == id))
-    return conn.execute(airplane.select()).fetchall()
-
+    s = text("update airplane set model = :model, rows = :rows, seats_per_row = :seats_per_row, carrier_id = :carrier_id where id = :id")
+    return conn.execute(s, id = id, model = model, rows = rows, seats_per_row = seats_per_row, carrier_id = carrier_id)
 ## delete airplane
 @airplanes.delete("/deleteAirplane{id}")
 async def deleteAirplane(id: int):
