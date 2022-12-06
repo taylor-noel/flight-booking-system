@@ -133,7 +133,9 @@
     );
 
 
-    INSERT INTO flight VALUES("F001", "Tokyo", "Mexico City", 1, "2020-01-01", "2020-01-02");
+    INSERT INTO flight VALUES("F001", "Tokyo", "Mexico City", 1, "2008-09-15T15:53:00+05:00", "2008-09-15T15:53:00+05:00");
+    INSERT INTO flight VALUES("F002", "Mexico City", "Tokyo", , "2008-09-15T15:53:00+05:00", "2008-09-15T15:53:00+05:00");
+    INSERT INTO flight VALUES("F003", "San Francisco", "Mexico City", 2, "2008-09-15T15:53:00+05:00", "2008-09-15T15:53:00+05:00");
 
   
     DROP TABLE IF EXISTS admin;

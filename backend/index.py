@@ -10,8 +10,6 @@ from routes.index import airports
 from routes.index import seats
 from fastapi.middleware.cors import CORSMiddleware
 
-from fastapi.middleware.cors import CORSMiddleware
-
 app = FastAPI()
 
 origins = ["*"]
