@@ -2,6 +2,7 @@ import './LoginPage.css';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Header from '../components/Header';
+import axios from 'axios';
 
 function RegisterAdminPage() {
     const [authorize, setAuthorize] = useState(false);
@@ -11,21 +12,33 @@ function RegisterAdminPage() {
     const navigate = useNavigate();
 
     function handleEmail(event: any) {
+        event.preventDefault();
         setEmail({ value: event.target.value });
     }
     function handlePassword(event: any) {
+        event.preventDefault();
+
         setPassword({ value: event.target.value });
     }
     function handleSubmit(event: any) {
-        //TODO: Check if there is a record with that email
-        if (email.value === "taylor") {
-            setAuthorize(true);
-        }
-        else {
-            //TODO: write to database
-            
-        }
-        navigate('/login');
+        event.preventDefault();
+        setAuthorize(false);
+
+
+        axios.get('http://127.0.0.1:8000/getAdminEmails')
+        .then(response => { 
+            const emails: string[] = []
+            response.data.forEach((x: { [x: string]: any; }) =>{emails.push(x["email"])})
+            if (emails.includes(email.value)) {
+                setAuthorize(true);
+            }
+        });
+
+        //TODO: needs to be checked!
+        if(password.value != '' && email.value != '' && !authorize){
+            axios.post('http://127.0.0.1:8000/createAdmin/' +email.value + "/" + password.value);
+            navigate('/login');
+        }        
 
     }
 
