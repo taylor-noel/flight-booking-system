@@ -79,6 +79,9 @@
     );
     
     
+   INSERT INTO airline_carrier VALUES(1, 'taylor@ws.ca', '1 street e', '250-009-0044', 'West Jet');
+    
+    
     DROP TABLE IF EXISTS airplane;
     CREATE TABLE airplane(
         id int not null,
@@ -91,13 +94,13 @@
     );
 
   
-    INSERT INTO airplane VALUES(1, 'Boeing 737', 30, 6, 237634);
-    INSERT INTO airplane VALUES(2, 'Boeing 747', 40, 8, 345555);
-    INSERT INTO airplane VALUES(3, 'Boeing 777', 50, 10,236473);
-    INSERT INTO airplane VALUES(4, 'Boeing 787', 60, 12,3264721);
-    INSERT INTO airplane VALUES(5, 'Airbus A320', 30, 6,1346713);
-    INSERT INTO airplane VALUES(6, 'Airbus A330', 40, 8,2362347);
-    INSERT INTO airplane VALUES(7, 'Airbus A350', 50, 10,17743516);
+    INSERT INTO airplane VALUES(1, 'Boeing 737', 30, 6, 1);
+    INSERT INTO airplane VALUES(2, 'Boeing 747', 40, 8, 1);
+    INSERT INTO airplane VALUES(3, 'Boeing 777', 50, 10,1);
+    INSERT INTO airplane VALUES(4, 'Boeing 787', 60, 12,1);
+    INSERT INTO airplane VALUES(5, 'Airbus A320', 30, 6,1);
+    INSERT INTO airplane VALUES(6, 'Airbus A330', 40, 8,1);
+    INSERT INTO airplane VALUES(7, 'Airbus A350', 50, 10,1);
 
 
     DROP TABLE IF EXISTS boarding_pass;
