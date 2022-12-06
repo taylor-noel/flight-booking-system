@@ -22,7 +22,7 @@ app.include_router(boardingpasses)
 app.include_router(airports)
 app.include_router(seats)
 
-# @app.get("/")
-# async def root():
-#     return {"message": "Hello Bigger Applications!"}
+@app.get("/")
+async def root():
+    return {"message": "Hello Bigger Applications!"}
 
