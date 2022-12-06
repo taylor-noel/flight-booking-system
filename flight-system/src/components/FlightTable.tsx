@@ -44,7 +44,7 @@ function FlightTable(props: any) {
                 setFlightData(response.data);
             });
         }else{
-            axios.get('http://127.0.0.1:8000/getFlightsBySearch/departure='+ departure+'arrival='+ arrival +'date=' + date)
+            axios.get('http://127.0.0.1:8000/getFlightsBySearch?departure=' + departure +"&arrival="+ arrival +"&date=" +date)
             .then(response => {
                 if(response.data.length === 0){
                     setIsNull(true);
@@ -92,11 +92,8 @@ function FlightTable(props: any) {
     const [editFlightNumber, setEditFlightNumber] = useState('');
 
     function handleEditClick(event: any, flight: any) {
-        setEditFlightNumber(flight.flight_number);
-        const splitted = flight.flight_number.split("-", 2);
-
         const editFlight = {
-            "flight_number": splitted[1],
+            "flight_number": flight.flight_number,
             "departure_airport": flight.departure_airport,
             "arrival_airport": flight.arrival_airport,
             "departure_time": flight.departure_time,
@@ -133,7 +130,7 @@ function FlightTable(props: any) {
         setEditFlightNumber('');
     }
 
-    //TODO: CHECK - not working yet
+
     function handleDeleteClick(event: any, flight: any) {
         axios.delete("http://127.0.0.1:8000/deleteFlight/"+ flight.flight_number)
         .then(response => {

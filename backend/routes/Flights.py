@@ -14,9 +14,9 @@ async def getFlights():
     return conn.execute(flight.select()).fetchall()
 
 ## GET ALL FLIGHTS by search
-@flights.get("/getFlightsBySearch/departure={departure}arrival={arrival}date={date}")
+@flights.get("/getFlightsBySearch")
 async def getFlightsBySearch(departure:str, arrival: str, date: str):
-    s = text("select flight.flight_number, arrival.city as arrival_airport, departure.city as departure_airport, arrival_time, departure_time, airplane.model as airplane_id from flight join airport as arrival on arrival.id = flight.arrival_airport join airport as departure on departure.id = flight.departure_airport join airplane on airplane.id = flight.airplane_id where departure.name = :x and arrival.name = :y and CAST(departure_time as DATE) = :z")
+    s = text("select flight.flight_number, arrival.city as arrival_airport, departure.city as departure_airport, arrival_time, departure_time, airplane.model as airplane_id from flight join airport as arrival on arrival.id = flight.arrival_airport join airport as departure on departure.id = flight.departure_airport join airplane on airplane.id = flight.airplane_id where departure.city = :x and arrival.city = :y and CAST(departure_time as DATE) = :z")
     return conn.execute(s, x=departure, y=arrival, z=date).fetchall()
 
 
