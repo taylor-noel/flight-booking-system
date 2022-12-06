@@ -6,14 +6,14 @@
     DROP TABLE IF EXISTS CUSTOMER;
     CREATE TABLE CUSTOMER(
         passport_number varchar(50) not null,
-        phone varchar(50) not null,
-        name varchar(50) not null,
-        fname varchar(50) not null,
-        lname varchar(50) not null,
+        phone varchar(14) not null,
+        email varchar(255) not null,
+        fname varchar(15) not null,
+        lname varchar(15) not null,
         credit_card_number varchar(50) not null,
         credit_card_csc varchar(50) not null,
         credit_card_expiry Date not null,
-        credit_card_name varchar(50) not null,
+        credit_card_name varchar(31) not null,
         primary key(passport_number)
     );
 
