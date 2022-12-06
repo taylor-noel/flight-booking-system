@@ -32,9 +32,9 @@ boarding_pass = Table(
     Column('passport_number', String(6), ForeignKey('customer.passport_number')),
     Column('flight_number', String(6), ForeignKey('flight.flight_number')),
     Column('departure_gate', String(3)),
-    Column('airplane_id', Integer, ForeignKey('airplane.id')),
-    Column('seat_letter', String(1), ForeignKey('seat.letter')),
-    Column('seat_number', Integer, ForeignKey('seat.number'))
+    Column('airplane_id', Integer),
+    Column('seat_letter', String(1)),
+    Column('seat_number', Integer)
 )
 
 
@@ -42,7 +42,7 @@ flight_booked = Table(
     'flight_booked', meta,
     Column('boarding_id', Integer, ForeignKey('boarding_pass.id')),
     Column('passport_number', String(6), ForeignKey('customer.passport_number')),
-    Column('flight_number', String(6), ForeignKey('flight.flight_number')),
+    Column('flight_number', String(6)),
     Column('primary_key', Integer, primary_key=True)
 )
 
@@ -59,8 +59,8 @@ seat = Table(
 flight = Table(
     'flight', meta,
     Column('flight_number', String(6), primary_key=True),
-    Column('arrival_airport', Integer, ForeignKey('airport.id')),
-    Column('departure_airport', Integer, ForeignKey('airport.id')),
+    Column('arrival_airport', Integer),
+    Column('departure_airport', Integer),
     Column('airplane_id', Integer, ForeignKey('airplane.id')),
     Column('departure_time', DateTime),
     Column('arrival_time', DateTime)
@@ -89,7 +89,7 @@ airplane = Table(
     'airplane', meta,
     Column('id', Integer, primary_key=True),
     Column('model', String(25)),
-    Column('rows', Integer),
+    Column('rowss', Integer),
     Column('seats_per_row', Integer),
-    Column('carrier_id', Integer, ForeignKey('airplane_carrier.id'))
+    Column('carrier_id', Integer)
 )
