@@ -3,16 +3,20 @@ import Select from "react-select";
 import EditableRow from "./EditableRow";
 import ReadOnlyRow from "./ReadOnlyRow";
 import './Table.css';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import SearchForm from "./SearchForm";
 import axios from "axios";
 
 
 
 function FlightTable(props: any) {
+    const location = useLocation();
+            
+    const { departure, arrival, date } = location.state;
 
     const [airports, setAirports] = useState<string[]>([]);
     const [airplane_ids, setAirplaneIds] = useState<string[]>([]);
+    const [isNull, setIsNull] = useState(false);
 
     interface Flight {
         flight_number: string,
@@ -34,10 +38,22 @@ function FlightTable(props: any) {
     const navigate = useNavigate();
 
     useEffect(() =>{
-        axios.get('http://127.0.0.1:8000/getFlights')
-        .then(response => {
-            setFlightData(response.data);
-        });
+        if(props.admin){
+            axios.get('http://127.0.0.1:8000/getFlights')
+            .then(response => {
+                setFlightData(response.data);
+            });
+        }else{
+            axios.get('http://127.0.0.1:8000/getFlightsBySearch/departure='+ departure+'arrival='+ arrival +'date=' + date)
+            .then(response => {
+                if(response.data.length === 0){
+                    setIsNull(true);
+                }
+                setFlightData(response.data);
+            });
+
+        }
+        
         axios.get('http://127.0.0.1:8000/getAirportCities')
         .then(response => {
             const cities: string[] = []
@@ -186,9 +202,8 @@ function FlightTable(props: any) {
         //TODO: call to the database
     }
     return <div>
-
         <h3>Flights</h3>
-        {props.admin ? null :
+{props.admin ? null :
             <div className="filterDiv">
                 <label className="filter">
                     Depart After
@@ -202,7 +217,7 @@ function FlightTable(props: any) {
                 </label>
             </div>
         }
-
+{isNull? <label>No Flights Match Your Search</label> :
         <table className="table">
             <thead>
                 <tr>
@@ -236,7 +251,7 @@ function FlightTable(props: any) {
                     </Fragment>
                 ))}
             </tbody>
-        </table>
+        </table>}
         {props.admin ?
             <div>
                 <h3>Add a Flight</h3>
