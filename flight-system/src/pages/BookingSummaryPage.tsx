@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import './BookingSummaryPage.css';
 
@@ -9,6 +9,7 @@ function BookingSummaryPage() {
 
     const { passport, flight_number } = location.state;
 
+    const navigate = useNavigate();
 
     const [customer, setCustomer] = useState({
         "passport_number": "",
@@ -41,6 +42,10 @@ function BookingSummaryPage() {
             setFlight(response.data);
         });
     }, [])
+
+    function handleConfirm(){
+        navigate("/confirmation");
+    }
 
     return <div>
         <Header showLogin={false} />
@@ -166,7 +171,7 @@ function BookingSummaryPage() {
                     readOnly />
             </form>
         </div>
-        <button>Confirm</button>
+        <button onClick={handleConfirm}>Confirm</button>
     </div>
 }
 export default BookingSummaryPage;

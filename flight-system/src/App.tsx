@@ -5,6 +5,7 @@ import './App.css';
 import AdminPage from './pages/AdminPage';
 import BookingLoginPage from './pages/BookingLogin';
 import BookingSummaryPage from './pages/BookingSummaryPage';
+import FinalPage from './pages/FinalPage';
 import FlightPage from './pages/FlightPage';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
@@ -22,6 +23,7 @@ function App() {
         <Route path="flights" element={<FlightPage />} />
         <Route path="register" element={<RegisterAdminPage/>}/>
         <Route path="registerCustomer" element={<RegisterCustomerPage/>}/>
+        <Route path="confirmation" element={<FinalPage/>} />
         <Route path="/" element={<LandingPage />} />
       </Routes>
     </div>
