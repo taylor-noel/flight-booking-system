@@ -1,17 +1,47 @@
 import "./RegisterCustomerPage.css";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Header from "../components/Header";
+import { useState } from "react";
+import axios from "axios";
 
 
 function RegisterCustomerPage() {
+    const location = useLocation();
+
+    const { flight_number } = location.state;
     const navigate = useNavigate();
 
-    function handleSubmit(){
-        navigate('/summary');
+    interface Customer {"passport_number": string, 
+    "phone": string, "email": string, "fname": string, "lname": string, 
+    "credit_card_number": number, "credit_card_csc": number, "credit_card_expiry": string, "credit_card_name": string}
+
+    const [customer, setCustomer] = useState<Customer>({
+        passport_number: '',
+        phone: '',
+        email: '',
+        fname: '',
+        lname: '',
+        credit_card_number: 0,
+        credit_card_csc: 0,
+        credit_card_expiry: '2022-12-06',
+        credit_card_name: ''
+    });
+
+    //TODO: check post
+    function handleSubmit() {
+        axios.post("http://127.0.0.1:8000/createCustomer", customer)
+        navigate('/summary', { state: { passport: customer.passport_number, flight_number: flight_number } });
+    }
+    function handleChange(event: any) {
+        const newCustomerData:any = { ...customer };
+        newCustomerData[event.target.name as keyof typeof customer] = event.target.value;
+
+        setCustomer(newCustomerData);
+
     }
 
     return <div className="registerPage">
-        <Header showLogin={false}/>
+        <Header showLogin={false} />
         <form className="registerForm">
             <label className="title">Register as a Customer</label>
             <div className="sameLine">
@@ -20,16 +50,20 @@ function RegisterCustomerPage() {
                     <input
                         type="text"
                         name="fname"
-                        placeholder="First Name" 
-                        required={true}/>
+                        placeholder="First Name"
+                        required={true} 
+                        value={customer.fname}
+                onChange={handleChange}/>
                 </div>
                 <div className="stacked">
                     <label>Last Name</label>
                     <input
                         type="text"
                         name="lname"
-                        placeholder="Last Name"                         
-                        required={true}/>
+                        placeholder="Last Name"
+                        required={true} 
+                        value={customer.lname}
+                onChange={handleChange}/>
                 </div>
             </div>
 
@@ -37,55 +71,62 @@ function RegisterCustomerPage() {
             <input
                 type="text"
                 name="passport_number"
-                placeholder="Passport Number" 
-                required={true}/>
+                placeholder="Passport Number"
+                required={true}
+                value={customer.passport_number}
+                onChange={handleChange} />
             <label>Phone Number</label>
             <input
                 type="phone"
                 name="phone"
-                placeholder="Phone Number" 
-                required={true}/>
+                placeholder="Phone Number"
+                required={true} 
+                value={customer.phone}
+                onChange={handleChange}/>
             <label>Email</label>
             <input
                 type="email"
                 name="email"
-                placeholder="Email" 
-                required={true}/>
+                placeholder="Email"
+                required={true}
+                value={customer.email}
+                onChange={handleChange} />
             <label>Credit Card Number</label>
             <input
                 type="text"
                 name="credit_card_number"
-                placeholder="Credit Card Number" 
-                required={true}/>
+                placeholder="Credit Card Number"
+                required={true} 
+                value={customer.credit_card_number}
+                onChange={handleChange}/>
             <label>Name on Credit Card</label>
             <input
                 type="text"
                 name="credit_card_name"
-                placeholder="Name on Credit Card" 
-                required={true}/>
-            <label>CSC</label>
+                placeholder="Name on Credit Card"
+                required={true} 
+                value={customer.credit_card_name}
+                onChange={handleChange}/>
+            
+            <div className="sameLine">
+                <div className="stacked">
+                <label>CSC</label>
             <input
                 type="text"
                 name="credit_card_csc"
-                placeholder="CSC" 
-                required={true}/>
-            <div className="sameLine">
+                value={customer.credit_card_csc}
+                placeholder="CSC"
+                required={true} 
+                onChange={handleChange}/>
+                </div>
                 <div className="stacked">
                     <label>Credit Card Expiry</label>
                     <input
-                        type="number"
-                        name="credit_card_expiry_month"
-                        placeholder="Month"
-                        min="1"
-                        max="12" 
-                        required={true}/>
-                </div>
-                <div className="stacked">
-                    <input
-                        type="number"
-                        name="credit_card_expiry_year"
-                        placeholder="Year" 
-                        required={true}/>
+                        type="date"
+                        name="credit_card_expiry"
+                        required={true}
+                        value={customer.credit_card_expiry}
+                        onChange={handleChange} />
                 </div>
             </div>
             <button onClick={handleSubmit}>Submit</button>

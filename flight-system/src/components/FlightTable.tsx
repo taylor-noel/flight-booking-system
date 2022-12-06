@@ -14,7 +14,7 @@ function FlightTable(props: any) {
     const [airports, setAirports] = useState<string[]>([]);
     const [airplane_ids, setAirplaneIds] = useState<string[]>([]);
 
-    interface Flight1 {
+    interface Flight {
         flight_number: string,
         departure_airport: string,
         arrival_airport: string,
@@ -23,7 +23,7 @@ function FlightTable(props: any) {
         airplane_id: string
     }
 
-    const [flightData, setFlightData] = useState<Array<Flight1>>([{
+    const [flightData, setFlightData] = useState<Array<Flight>>([{
         airplane_id: "1",
         arrival_airport: "1",
         arrival_time: "2022-12-05T08:30:00",
@@ -53,7 +53,7 @@ function FlightTable(props: any) {
     }, []);
     
 
-    const [formData, setFormData] = useState<Flight1>({
+    const [formData, setFormData] = useState<Flight>({
         "flight_number": '',
         "departure_airport": '',
         "arrival_airport": '',
@@ -63,7 +63,7 @@ function FlightTable(props: any) {
     });
 
 
-    const [editFlightData, setEditFlightData] = useState<Flight1>({
+    const [editFlightData, setEditFlightData] = useState<Flight>({
         "flight_number": '',
         "departure_airport": '',
         "arrival_airport": '',
@@ -173,7 +173,7 @@ function FlightTable(props: any) {
     }
 
     function handleBookClick(event: any, flight: any) {
-        navigate('/loginCustomer');
+        navigate('/loginCustomer', {state:{flight_number: flight.flight_number}});
     }
 
     //TODO: CHECK - not working yet

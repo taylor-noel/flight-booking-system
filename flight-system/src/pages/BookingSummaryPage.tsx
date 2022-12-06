@@ -1,32 +1,49 @@
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import Header from '../components/Header';
 import './BookingSummaryPage.css';
 
-function BookingSummaryPage(props: any) {
+function BookingSummaryPage() {
+    const location = useLocation();
 
-    //call to database get the customer
-    const customer = {
-        "passport_number": "HN431",
-        "fname": "Jon",
-        "lname": "Doe",
-        "phone": "250-889-2241",
-        "email": "jon.doe@outlook.com",
-        "credit_card_name": "Jon Doe",
-        "credit_card_expiry_month": "9",
-        "credit_card_expiry_year": "2023",
-        "credit_card_expiry_csc": "943"
-    }
+    const { passport, flight_number } = location.state;
 
-    const flight = {
-        "flightNumber": "AC-123",
-        "departure": "Calgary",
-        "arrival": "Toronto",
-        "departureDate": "2018-06-12T19:30",
-        "arrivalDate": "2018-06-12T21:30",
-        "airplaneModel": "123"
-    }
+
+    const [customer, setCustomer] = useState({
+        "passport_number": "",
+        "fname": "",
+        "lname": "",
+        "phone": "",
+        "email": "",
+        "credit_card_name": "",
+        'credit_card_expiry_date': '',
+        "credit_card_csc": 0,
+        "credit_card_number": 0
+    });
+
+    const [flight, setFlight] = useState({
+        "flight_number": '',
+            "departure_airport": '',
+            "arrival_airport": '',
+            "departure_time": '',
+            "arrival_time": '',
+            "airplane_id": ''
+    });
+
+    useEffect(() => {
+        axios.get('http://127.0.0.1:8000/selectCustomer' + passport)
+            .then(response => {
+                setCustomer(response.data)
+            });
+        axios.get('http://127.0.0.1:8000/selectFlight' + flight_number)
+        .then(response => {
+            setFlight(response.data);
+        });
+    }, [])
 
     return <div>
-        <Header showLogin={false}/>
+        <Header showLogin={false} />
         <h3>Booking Summary</h3>
         <div className="summary">
             <form className="registerForm">
@@ -77,7 +94,7 @@ function BookingSummaryPage(props: any) {
                 <input
                     type="text"
                     name="credit_card_number"
-                    placeholder="Credit Card Number"
+                    placeholder={customer.credit_card_number.toString()}
                     required={true}
                     readOnly />
                 <label>Name on Credit Card</label>
@@ -87,28 +104,23 @@ function BookingSummaryPage(props: any) {
                     placeholder={customer.credit_card_name}
                     required={true}
                     readOnly />
-                <label>CSC</label>
-                <input
-                    type="text"
-                    name="credit_card_csc"
-                    placeholder={customer.credit_card_expiry_csc}
-                    required={true}
-                    readOnly />
+
                 <div className="sameLine">
                     <div className="stacked">
-                        <label>Credit Card Expiry</label>
+                        <label>CSC</label>
                         <input
-                            type="number"
-                            name="credit_card_expiry_month"
-                            placeholder={customer.credit_card_expiry_month}
-                            readOnly
-                            required={true} />
+                            type="text"
+                            name="credit_card_csc"
+                            placeholder={customer.credit_card_csc.toString()}
+                            required={true}
+                            readOnly />
                     </div>
                     <div className="stacked">
+                        <label>Expiry Date</label>
                         <input
-                            type="number"
-                            name="credit_card_expiry_year"
-                            placeholder={customer.credit_card_expiry_year}
+                            type="date"
+                            name="credit_card_expiry_date"
+                            value={customer.credit_card_expiry_date}
                             readOnly
                             required={true} />
                     </div>
@@ -120,37 +132,37 @@ function BookingSummaryPage(props: any) {
                 <input
                     type="text"
                     name="flightNumber"
-                    placeholder={flight.flightNumber}
+                    placeholder={flight.flight_number}
                     readOnly />
                 <label>Departure City</label>
                 <input
                     type="text"
                     name="departure"
-                    placeholder={flight.departure}
+                    placeholder={flight.departure_airport}
                     readOnly />
                 <label>Destination City</label>
                 <input
                     type="text"
                     name="arrival"
-                    placeholder={flight.arrival}
+                    placeholder={flight.arrival_airport}
                     readOnly />
                 <label>Departure Date</label>
                 <input
                     type="datetime-local"
                     name="departureDate"
-                    value={flight.departureDate}
+                    value={flight.departure_time}
                     readOnly />
                 <label>Arrival Date</label>
                 <input
                     type="datetime-local"
                     name="arrivalDate"
-                    value={flight.arrivalDate}
+                    value={flight.arrival_time}
                     readOnly />
                 <label>Airplane Model</label>
                 <input
                     type="text"
                     name="airplaneModel"
-                    placeholder={flight.airplaneModel}
+                    placeholder={flight.airplane_id}
                     readOnly />
             </form>
         </div>

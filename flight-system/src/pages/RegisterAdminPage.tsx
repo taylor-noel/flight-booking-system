@@ -35,7 +35,7 @@ function RegisterAdminPage() {
         });
 
         //TODO: needs to be checked!
-        if(password.value != '' && email.value != '' && !authorize){
+        if(password.value != '' && email.value !== '' && !authorize){
             axios.post('http://127.0.0.1:8000/createAdmin/' +email.value + "/" + password.value);
             navigate('/login');
         }        

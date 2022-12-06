@@ -1,24 +1,34 @@
 import './LoginPage.css';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Header from '../components/Header';
+import axios from 'axios';
 
 function BookingLoginPage() {
+
+    const location = useLocation();
+
+    const { flight_number } = location.state;
     const [passport, setPassport] = useState({ value: '' });
 
     const navigate = useNavigate();
 
     function handlePassport(event: any) {
+        event.preventDefault();
         setPassport({ value: event.target.value });
     }
     function handleLogin(event: any) {
-        //TODO: authorize passport if there is no customer navigate to a different page
-        if (passport.value === "taylor") {
-            navigate('/summary');
-        }
-        else {
-            navigate('/registerCustomer');
-        }
+        event.preventDefault();
+
+        axios.get('http://127.0.0.1:8000/selectCustomer' + passport.value)
+        .then(response => { 
+            if (response.data != null) {
+
+                navigate('/summary', {state: {passport:passport.value, flight_number:flight_number}});
+            } else{
+                navigate('/registerCustomer', {state: {passport:passport.value, flight_number:flight_number}});
+            }
+        });
 
     }
 
