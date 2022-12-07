@@ -30,15 +30,24 @@ async def selectAirplane(id: int):
 
 ## create new airplane
 @airplanes.put("/createAirplane")
-async def createAirplane(id: int, model: str, rows : int, seats_per_row: int, carrier_id: int):
-    s = text("insert into airplane (id, model, rows, seats_per_row, carrier_id) values (:id, :model, :rows, :seats_per_row, :carrier_id)")
-    return conn.execute(s, id = id, model = model, rows = rows, seats_per_row = seats_per_row, carrier_id = carrier_id)
+async def createAirplane(id: int, model: str, rowss : int, seats_per_row: int, carrier_name: str):
+    s = text("select id from airplane_carrier where name = :x")
+    carrier_id = conn.execute(s, x=carrier_name).first()
+    s1 = text("insert into airplane (id, model, rowss, seats_per_row, carrier_id) values (:id, :model, :rowss, :seats_per_row, :carrier_id)")
+    conn.execute(s1, id = id, model = model, rowss = rowss, seats_per_row = seats_per_row, carrier_id = carrier_id[0])
+    s2 = text("select airplane.id,model,rowss, seats_per_row, carrier.name as carrier_name from airplane join airplane_carrier as carrier on carrier.id = carrier_id")
+    return conn.execute(s2).fetchall()
+
 
 ## update airplane
-@airplanes.post("/updateAirplane{id}")
-async def updateAirplane(id: int, model: str, rows : int, seats_per_row: int, carrier_id: int):
-    s = text("update airplane set model = :model, rows = :rows, seats_per_row = :seats_per_row, carrier_id = :carrier_id where id = :id")
-    return conn.execute(s, id = id, model = model, rows = rows, seats_per_row = seats_per_row, carrier_id = carrier_id)
+@airplanes.post("/updateAirplane")
+async def updateAirplane(id: int, model: str, rowss : int, seats_per_row: int, carrier_name: str):
+    s = text("select id from airplane_carrier where name = :x")
+    carrier_id = conn.execute(s, x=carrier_name).first()
+    s1 = text("update airplane set model = :model, rowss = :rowss, seats_per_row = :seats_per_row, carrier_id = :carrier_id where id = :id")
+    conn.execute(s1, id = id, model = model, rowss = rowss, seats_per_row = seats_per_row, carrier_id = carrier_id[0])
+    s2 = text("select airplane.id,model,rowss, seats_per_row, carrier.name as carrier_name from airplane join airplane_carrier as carrier on carrier.id = carrier_id")
+    return conn.execute(s2).fetchall()
 ## delete airplane
 @airplanes.delete("/deleteAirplane{id}")
 async def deleteAirplane(id: int):

@@ -4,7 +4,6 @@ import EditableRow from "./EditableRow";
 import ReadOnlyRow from "./ReadOnlyRow";
 import './Table.css';
 import { useLocation, useNavigate } from 'react-router-dom';
-import SearchForm from "./SearchForm";
 import axios from "axios";
 
 
@@ -92,6 +91,7 @@ function FlightTable(props: any) {
     const [editFlightNumber, setEditFlightNumber] = useState('');
 
     function handleEditClick(event: any, flight: any) {
+        event.preventDefault();
         const editFlight = {
             "flight_number": flight.flight_number,
             "departure_airport": flight.departure_airport,
@@ -102,6 +102,7 @@ function FlightTable(props: any) {
         };
 
         setEditFlightData(editFlight);
+        setEditFlightNumber(flight.flight_number);
     }
 
     function handleEditFlightChange(event: any) {
@@ -141,19 +142,12 @@ function FlightTable(props: any) {
     
     //TODO: CHECK - not working yet
     function handleSaveFlight(event: any) {
-        const editedFlight = {
-            "flight_number": editFlightData.flight_number,
-            "departure_airport": editFlightData.departure_airport,
-            "arrival_airport": editFlightData.arrival_airport,
-            "departure_time": editFlightData.departure_time,
-            "arrival_time": editFlightData.arrival_time,
-            "airplane_id": editFlightData.airplane_id
-        }
-        const newFlightData = [...flightData];
-        const index = flightData.findIndex((flight) => flight.flight_number === editFlightNumber);
-        newFlightData[index] = editedFlight;
-
-        setFlightData(newFlightData);
+        event.preventDefault();
+        const splitted = editFlightData.flight_number.split('-', 2);
+        axios.post("http://127.0.0.1:8000/updateFlight?flight_number="+editFlightData.flight_number+'&departure_airport='+editFlightData.departure_airport+'&arrival_airport='+editFlightData.arrival_airport+'&departure_time=' +editFlightData.departure_time + '&arrival_time='+ editFlightData.arrival_time+'&airplane_model='+editFlightData.airplane_id + '&airplane_carrier='+ splitted[0])
+        .then(response =>{
+            setFlightData(response.data)
+        })
         setEditFlightNumber('');
     }
 
@@ -161,23 +155,15 @@ function FlightTable(props: any) {
     
     //TODO: CHECK - not working yet
     function handleForm(event: any) {
+        event.preventDefault();
         const splitted = formData.airplane_id.split("-", 2);
 
-        const flight_number = splitted[0] + "-1";
-        const newFlight = {
-            "flight_number": flight_number,
-            "departure_airport": formData.departure_airport,
-            "arrival_airport": formData.arrival_airport,
-            "departure_time": formData.departure_time,
-            "arrival_time": formData.arrival_time,
-            "airplane_model": splitted[1],
-            "airline_carrier": splitted[0]
-        }
+        const flight_number = splitted[0] +"-" + Math.floor(Math.random()*1000);
 
-        axios.post("http://127.0.0.1:8000/createFlight", newFlight);
-        // const newFlightData = [...flightData];
-        // newFlightData.push(newFlight);
-        // setFlightData(newFlightData);
+        axios.put("http://127.0.0.1:8000/createFlight?flight_number="+flight_number+'&departure_airport='+formData.departure_airport+'&arrival_airport='+formData.arrival_airport+'&departure_time=' +formData.departure_time + '&arrival_time='+ formData.arrival_time+'&airplane_model='+splitted[1] + '&airplane_carrier='+ splitted[0])
+        .then(response =>{
+            setFlightData(response.data)
+        })
         setFormData({
             "flight_number": '',
             "departure_airport": '',

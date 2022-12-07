@@ -42,8 +42,7 @@ function RegisterAdminPage() {
         "&password=" +
         password.value;
       axios.put(url).then((response) => {
-        console.log(response);
-        navigate("/Login");
+        navigate("/login");
       });
     }
   }

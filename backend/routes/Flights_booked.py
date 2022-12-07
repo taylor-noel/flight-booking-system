@@ -20,7 +20,7 @@ async def selectFlightBooked(passport_number: str):
 @flightsbooked.put("/createFlightBooked")
 async def createFlightBooked(boarding_id: int , passport_number: str, flight_number : str):
     s = text("insert into flight_booked (boarding_id, passport_number, flight_number) values (:boarding_id, :passport_number, :flight_number)")
-    return conn.execute(s, boarding_id = flightsbooked.boarding_id, passport_number = flightsbooked.passport_number, flight_number = flightsbooked.flight_number)
+    return conn.execute(s, boarding_id = boarding_id, passport_number = passport_number, flight_number = flight_number)
 
 ##update flight booked
 @flightsbooked.post("/updateFlightBooked{passport_number}")

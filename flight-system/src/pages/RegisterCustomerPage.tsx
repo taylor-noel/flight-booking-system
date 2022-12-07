@@ -28,8 +28,9 @@ function RegisterCustomerPage() {
     });
 
     //TODO: check post
-    function handleSubmit() {
-        axios.post("http://127.0.0.1:8000/createCustomer", customer)
+    function handleSubmit(event:any) {
+        event.preventDefault();
+        axios.put("http://127.0.0.1:8000/createCustomer?passport_number="+ customer.passport_number + "&phone="+customer.phone +"&email="+customer.email+"&fname="+customer.fname +"&lname="+ customer.lname +"&credit_card_number=" +customer.credit_card_number + "&credit_card_csc="+customer.credit_card_csc+"&credit_card_expiry="+customer.credit_card_expiry +"&credit_card_name="+ customer.credit_card_name)
         navigate('/summary', { state: { passport: customer.passport_number, flight_number: flight_number } });
     }
     function handleChange(event: any) {

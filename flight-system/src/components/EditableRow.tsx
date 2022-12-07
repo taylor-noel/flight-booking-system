@@ -7,42 +7,37 @@ const EditableRow = (props: any) => {
             <td>
                 <input
                     type="text"
-                    required={true}
                     value={props.editFlightData.departure_airport}
                     onChange={props.handleEditFlightChange}
-                    name="departure"></input>
+                    name="departure_airport"></input>
             </td>
             <td>
                 <input
                     type="text"
-                    required={true}
                     value={props.editFlightData.arrival_airport}
                     onChange={props.handleEditFlightChange}
-                    name="arrival"></input>
+                    name="arrival_airport"></input>
             </td>
             <td>
                 <input
                     type="datetime-local"
-                    required={true}
                     value={props.editFlightData.departure_time}
                     onChange={props.handleEditFlightChange}
-                    name="departureDate"></input>
+                    name="departure_time"></input>
             </td>
             <td>
                 <input
                     type="datetime-local"
-                    required={true}
                     value={props.editFlightData.arrival_time}
                     onChange={props.handleEditFlightChange}
-                    name="arrivalDate"></input>
+                    name="arrival_time"></input>
             </td>
             <td>
                 <input
                     type="text"
-                    required={true}
-                    value={props.editFlightData.airplane_model}
+                    value={props.editFlightData.airplane_id}
                     onChange={props.handleEditFlightChange}
-                    name="airplaneModel"></input>
+                    name="airplane_id"></input>
             </td>
             {props.admin ?
                 <td>

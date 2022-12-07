@@ -1,12 +1,13 @@
 import axios from "axios";
 import { Fragment, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Select from "react-select";
-import EditableRow from "./EditableRow";
 import EditableRowAirplane from "./EditableRowAirplane";
 import ReadOnlyRowAirplane from "./ReadOnlyRowAirplane";
 import './Table.css';
 
 function AirplaneTable(props: any) {
+    const navigate = useNavigate();
     interface Airplane {
         "id": number,
         "model": string,
@@ -101,42 +102,34 @@ function AirplaneTable(props: any) {
     }
 
     function handleSaveAirplane(event: any) {
-        const editedAirplane = {
-            id: editAirplaneData.id,
-            model: editAirplaneData.model,
-            rowss: editAirplaneData.rowss,
-            seats_per_row: editAirplaneData.seats_per_row,
-            carrier_name: editAirplaneData.carrier_name
-        }
-        const newAirplaneData = [...airplaneData];
-        const index = airplaneData.findIndex((airplane) => airplane.id === editAirplaneNumber);
-        newAirplaneData[index] = editedAirplane;
-
-        setAirplaneData(newAirplaneData);
+        event.preventDefault();
+        axios.post('http://127.0.0.1:8000/updateAirplane?id='+editAirplaneData.id  + '&model=' + editAirplaneData.model + '&rowss='+editAirplaneData.rowss + '&seats_per_row=' + editAirplaneData.seats_per_row + '&carrier_name=' + editAirplaneData.carrier_name)
+        .then(response =>{
+            setAirplaneData(response.data)
+        })
         setEditAirplaneNumber(0);
     }
 
 
     // TODO: update to push formdata to database
     function handleForm(event: any) {
-        const newAirplane = {
-            id: 2,
-            model: formData.model,
-            rowss: formData.rowss,
-            seats_per_row: formData.seats_per_row,
-            carrier_name: formData.carrier_name
-        }
+    event.preventDefault();
 
-        const newAirplaneData = [...airplaneData];
-        newAirplaneData.push(newAirplane);
-        setAirplaneData(newAirplaneData);
-        setFormData({
-            id: 0,
-            model: '',
-            rowss: 0,
-            seats_per_row: 0,
-            carrier_name: ''
+        const id = Math.floor(Math.random()*1000);
+        axios.put('http://127.0.0.1:8000/createAirplane?id=' + id + '&model=' + formData.model + '&rowss='+formData.rowss + '&seats_per_row=' + formData.seats_per_row + '&carrier_name=' + formData.carrier_name)
+        .then(response =>{
+            setFormData({
+                "id": 0,
+                "model": '',
+                "rowss": 0,
+                "seats_per_row": 0,
+                "carrier_name": ''
+            });
+            setAirplaneData(response.data);
+           
         })
+        axios.put('http://127.0.0.1:8000/createInsertAirplane?airplane_id=' + id + '&email=' + 'admin@admin.com' + '&timestamp=' + new Date())        
+        
     }
 
     return <div>
@@ -175,7 +168,7 @@ function AirplaneTable(props: any) {
             </tbody>
         </table>
         <h3>Add a Airplane</h3>
-        <form className="addForm" onSubmit={handleForm}>
+        <form className="addForm">
             <div className="formItem">
                 <label>Airplane Model</label>
                 <input
@@ -216,7 +209,7 @@ function AirplaneTable(props: any) {
                     onChange={handleSelectChange}
                 />
             </div>
-            <button type="submit">Add</button>
+            <button onClick={handleForm}>Add</button>
         </form>
 
     </div>
