@@ -66,7 +66,19 @@
     INSERT INTO airport VALUES(36, 'Egypt', 'Cairo International Airport', 'Egypt');
     INSERT INTO airport VALUES(37, 'Egypt', 'Alexandria International Airport', 'Egypt');
 
+    DROP TABLE IF EXISTS AIRPLANE_CARRIER;
+    CREATE TABLE AIRPLANE_CARRIER(
+        id int not null,
+        email varchar(255) not null,
+        address varchar(255) not null,
+        phone varchar(14) not null,
+        name varchar(25) not null,
+        primary key(id)
+    );
 
+    INSERT INTO airplane_carrier VALUES(1, 'taylor@westjet.com', '1st street e', '445-333-3333', 'West Jet');
+    
+    
     DROP TABLE IF EXISTS airplane;
     CREATE TABLE airplane(
         id int not null,
@@ -74,52 +86,19 @@
         rowss int not null,
         seats_per_row int not null,
         carrier_id int not null,
-        primary key(id)
-    );
-
-  
-    INSERT INTO airplane VALUES(1, 'Boeing 737', 30, 6, 237634);
-    INSERT INTO airplane VALUES(2, 'Boeing 747', 40, 8, 345555);
-    INSERT INTO airplane VALUES(3, 'Boeing 777', 50, 10,236473);
-    INSERT INTO airplane VALUES(4, 'Boeing 787', 60, 12,3264721);
-    INSERT INTO airplane VALUES(5, 'Airbus A320', 30, 6,1346713);
-    INSERT INTO airplane VALUES(6, 'Airbus A330', 40, 8,2362347);
-    INSERT INTO airplane VALUES(7, 'Airbus A350', 50, 10,17743516);
-
-
-    DROP TABLE IF EXISTS boarding_pass;
-    CREATE TABLE boarding_pass(
-        id int not null,
-        passport_number varchar(50) not null,
-        flight_number varchar(50) not null,
-        departure_gate varchar(50) not null,
-        airplane_id int not null,
-        seat_letter varchar(1) not null,
-        seat_number int not null,
         primary key(id),
-        foreign key(passport_number) references customer(passport_number)
+        foreign key(carrier_id) references airplane_carrier(id)
     );
 
   
-    DROP TABLE IF EXISTS flight_booked;
-    CREATE TABLE flight_booked(
-        boarding_id int not null,
-        passport_number varchar(50) not null,
-        flight_number varchar(50) not null,
-        primary key(boarding_id),
-        foreign key(passport_number) references customer(passport_number)
-    );
-
-   
-    DROP TABLE IF EXISTS seat;
-    CREATE TABLE seat(
-        airplane_id int not null,
-        letter varchar(50) not null,
-        number int not null,
-        primary key(airplane_id, letter, number)
-    );
-
-
+    INSERT INTO airplane VALUES(1, 'Boeing 737', 30, 6, 1);
+    INSERT INTO airplane VALUES(2, 'Boeing 747', 40, 8, 1);
+    INSERT INTO airplane VALUES(3, 'Boeing 777', 50, 10,1);
+    INSERT INTO airplane VALUES(4, 'Boeing 787', 60, 12,1);
+    INSERT INTO airplane VALUES(5, 'Airbus A320', 30, 6,1);
+    INSERT INTO airplane VALUES(6, 'Airbus A330', 40, 8,1);
+    INSERT INTO airplane VALUES(7, 'Airbus A350', 50, 10,1);
+    
     DROP TABLE IF EXISTS flight;
     CREATE TABLE flight(
         flight_number varchar(50) not null,
@@ -137,6 +116,41 @@
     INSERT INTO flight VALUES("F002", "Mexico City", "Tokyo", , "2008-09-15T15:53:00+05:00", "2008-09-15T15:53:00+05:00");
     INSERT INTO flight VALUES("F003", "San Francisco", "Mexico City", 2, "2008-09-15T15:53:00+05:00", "2008-09-15T15:53:00+05:00");
 
+
+    DROP TABLE IF EXISTS boarding_pass;
+    CREATE TABLE boarding_pass(
+        id int not null,
+        passport_number varchar(50) not null,
+        flight_number varchar(50) not null,
+        departure_gate varchar(50) not null,
+        airplane_id int not null,
+        seat_letter varchar(1) not null,
+        seat_number int not null,
+        primary key(id),
+        foreign key(passport_number) references customer(passport_number),
+        foreign key(flight_number) references flight(flight_number)
+    );
+
+  
+    DROP TABLE IF EXISTS flight_booked;
+    CREATE TABLE flight_booked(
+        boarding_id int not null,
+        passport_number varchar(50) not null,
+        flight_number varchar(50) not null,
+        primary key(boarding_id),
+        foreign key(passport_number) references customer(passport_number),
+        foreign key(flight_number) references flight(flight_number)
+    );
+
+   
+    DROP TABLE IF EXISTS seat;
+    CREATE TABLE seat(
+        airplane_id int not null,
+        letter varchar(50) not null,
+        number int not null,
+        primary key(airplane_id, letter, number)
+    );
+
   
     DROP TABLE IF EXISTS admin;
     CREATE TABLE admin(
@@ -147,17 +161,6 @@
 
 
     INSERT INTO admin VALUES("admin@admin.com", "admin");
-
-
-    DROP TABLE IF EXISTS AIRPLANE_CARRIER;
-    CREATE TABLE AIRPLANE_CARRIER(
-        id int not null,
-        email varchar(255) not null,
-        address varchar(255) not null,
-        phone varchar(14) not null,
-        name varchar(25) not null,
-        primary key(id)
-    );
 
 
 
