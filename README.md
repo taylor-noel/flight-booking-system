@@ -12,6 +12,7 @@ start running mysql
 note mysql may fail if you have skype downloaded on your machine
 
 create a database in mysql with port 3307 and name it test
+run the file in the sqlfile directory to populate and create the tables in the database
 
 to run the react app navigate to the flightSystem directory then run npm i
 then run npm start
